@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skema ERD - Budi Variasi Mobil</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Times+New+Roman&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #080d1a;
+            --bg-card: #0b1329;
+            --bg-viewport: #0f172a;
+            --border-color: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --accent-color: #3b82f6;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        body.theme-light {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-viewport: #f1f5f9;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-color: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        header {
+            max-width: 1280px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .header-title span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background-color: var(--bg-viewport);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            background-color: var(--accent-color);
+        }
+
+        .academic-info {
+            max-width: 1280px;
+            margin: 0 auto 24px auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .academic-info strong {
+            color: var(--text-main);
+        }
+
+        .toolbar {
+            max-width: 1280px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        select {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .canvas-card {
+            max-width: 1280px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .card-title p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .canvas-wrapper {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: auto;
+            position: relative;
+            min-height: 600px;
+            max-height: 900px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        #erd-svg {
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: block;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        /* SVG Inner Styling classes based on toggled attributes */
+        /* SVG Font family styling */
+        #erd-svg.font-sans text {
+            font-family: 'Outfit', sans-serif !important;
+        }
+        #erd-svg.font-serif text {
+            font-family: 'Times New Roman', Times, serif !important;
+        }
+
+        /* Dotted Grid Pattern */
+        .grid-dot {
+            fill: #e2e8f0;
+        }
+        #erd-svg.theme-dark-canvas .grid-dot {
+            fill: #334155;
+        }
+
+        /* Table Card styles - Academic B&W Theme */
+        #erd-svg.style-academic .table-card {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 1.5px;
+            filter: none;
+        }
+        #erd-svg.style-academic .table-header-bg {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+        #erd-svg.style-academic .table-header-sep {
+            stroke: #000000;
+            stroke-width: 2px;
+        }
+        #erd-svg.style-academic .table-name {
+            fill: #000000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        #erd-svg.style-academic .col-name {
+            fill: #000000;
+            font-size: 11.5px;
+        }
+        #erd-svg.style-academic .col-name-pk {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        #erd-svg.style-academic .col-type {
+            fill: #555555;
+            font-size: 10px;
+        }
+        #erd-svg.style-academic .col-key-badge-bg {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 1px;
+        }
+        #erd-svg.style-academic .col-key-text {
+            fill: #000000;
+            font-weight: bold;
+            font-size: 9px;
+        }
+        #erd-svg.style-academic .connector-line {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 1.8px;
+        }
+
+        /* Table Card styles - Modern B&W Theme */
+        #erd-svg.style-modern-bw .table-card {
+            fill: #ffffff;
+            stroke: #0f172a;
+            stroke-width: 1.5px;
+            filter: drop-shadow(0 4px 6px rgba(15, 23, 42, 0.05));
+        }
+        #erd-svg.style-modern-bw .table-header-bg {
+            fill: #0f172a;
+            stroke: none;
+        }
+        #erd-svg.style-modern-bw .table-header-sep {
+            stroke: none;
+        }
+        #erd-svg.style-modern-bw .table-name {
+            fill: #ffffff;
+            font-weight: 800;
+            font-size: 13px;
+        }
+        #erd-svg.style-modern-bw .col-name {
+            fill: #0f172a;
+            font-size: 11.5px;
+        }
+        #erd-svg.style-modern-bw .col-name-pk {
+            font-weight: 700;
+        }
+        #erd-svg.style-modern-bw .col-type {
+            fill: #64748b;
+            font-size: 10px;
+        }
+        #erd-svg.style-modern-bw .col-key-badge-bg {
+            fill: #f1f5f9;
+            stroke: none;
+        }
+        #erd-svg.style-modern-bw .col-key-text {
+            fill: #475569;
+            font-weight: bold;
+            font-size: 8.5px;
+        }
+        #erd-svg.style-modern-bw .connector-line {
+            fill: none;
+            stroke: #1e293b;
+            stroke-width: 1.8px;
+        }
+
+        /* Table Card styles - Sleek Dark Theme */
+        #erd-svg.style-dark .table-card {
+            fill: #0b1329;
+            stroke: #1e293b;
+            stroke-width: 1.5px;
+        }
+        #erd-svg.style-dark .table-header-bg {
+            fill: #1e293b;
+            stroke: none;
+        }
+        #erd-svg.style-dark .table-header-sep {
+            stroke: none;
+        }
+        #erd-svg.style-dark .table-name {
+            fill: #f1f5f9;
+            font-weight: 800;
+            font-size: 13px;
+        }
+        #erd-svg.style-dark .col-name {
+            fill: #f1f5f9;
+            font-size: 11.5px;
+        }
+        #erd-svg.style-dark .col-name-pk {
+            font-weight: 700;
+        }
+        #erd-svg.style-dark .col-type {
+            fill: #64748b;
+            font-size: 10px;
+        }
+        #erd-svg.style-dark .col-key-badge-bg {
+            fill: #1e293b;
+            stroke: none;
+        }
+        #erd-svg.style-dark .col-key-text {
+            fill: #3b82f6;
+            font-weight: bold;
+            font-size: 8.5px;
+        }
+        #erd-svg.style-dark .connector-line {
+            fill: none;
+            stroke: #3b82f6;
+            stroke-width: 2px;
+        }
+
+        /* Draggable elements cursor indication */
+        .table-header-group {
+            cursor: move;
+        }
+
+        .detail-panel {
+            max-width: 1280px;
+            margin: 16px auto 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .detail-panel h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .detail-content {
+                grid-template-columns: 1.2fr 2fr;
+            }
+        }
+
+        .info-box {
+            background-color: var(--bg-viewport);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .info-box strong {
+            color: var(--text-main);
+        }
+
+        .meta-list {
+            list-style: none;
+        }
+
+        .meta-list li {
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 4px;
+        }
+
+        .meta-list li span:last-child {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .selected-table-header {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .selected-table-desc {
+            color: var(--text-main);
+            margin-bottom: 12px;
+        }
+
+        .btn-reset {
+            background-color: transparent;
+            border: 1px dashed var(--text-muted);
+            color: var(--text-muted);
+        }
+        .btn-reset:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Diagram Hubungan Entitas (ERD)</h1>
+            <span>Monokrom Hitam-Putih / Berwarna (Model Data Relasional Database Budi Variasi)</span>
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="toggleTheme()" id="themeBtn">🌓 Mode Terang (Cetak)</button>
+            <a href="/erd_chen.html" class="btn">📐 Lihat ERD Notasi Chen</a>
+            <a href="/flowchart_operasional.html" class="btn">📊 Lihat Flowchart Operasional</a>
+            <a href="/diagram_konteks.html" class="btn">🌐 Lihat DFD &amp; Diagram Konteks</a>
+            <a href="/admin/dashboard" class="btn btn-primary">Kembali ke Admin ↗</a>
+        </div>
+    </header>
+
+    <div class="academic-info">
+        💡 <strong>Petunjuk Skripsi:</strong> Anda dapat menggeser (drag &amp; drop) kotak tabel di canvas untuk merapikan tata letak sebelum mengunduh. Gunakan gaya <strong>Academic B&amp;W (Times New Roman)</strong> untuk disisipkan langsung ke naskah Bab IV Skripsi Anda agar memenuhi standard penulisan ilmiah.
+    </div>
+
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <label for="styleSelect" style="font-size: 0.85rem; font-weight: bold;">Gaya ERD:</label>
+            <select id="styleSelect" onchange="updateErdStyle()">
+                <option value="academic">Academic B&amp;W (Times New Roman, Cetak)</option>
+                <option value="modern-bw" selected>Modern B&amp;W (Sans-Serif, Bersih)</option>
+                <option value="dark">Sleek Dark Mode (Neon Accent)</option>
+            </select>
+
+            <label for="fontSelect" style="font-size: 0.85rem; font-weight: bold; margin-left: 12px;">Font:</label>
+            <select id="fontSelect" onchange="updateErdFont()">
+                <option value="serif">Times New Roman (Serif)</option>
+                <option value="sans" selected>Outfit / Arial (Sans-Serif)</option>
+            </select>
+        </div>
+
+        <div class="toolbar-group">
+            <button class="btn btn-reset" onclick="resetLayout()">🔄 Atur Ulang Posisi</button>
+            <button class="btn btn-primary" onclick="downloadAsPng()">📥 Unduh Gambar PNG</button>
+        </div>
+    </div>
+
+    <div class="canvas-card">
+        <div class="card-header">
+            <div class="card-title">
+                <h2>Canvas Database ERD - Budi Variasi Mobil</h2>
+                <p>Klik tabel untuk melihat detail kolom, tipe data, dan penjelasan hubungan relasional</p>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 16px;">
+                <span>Double-click / Drag untuk reposisi</span>
+            </div>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <svg id="erd-svg" width="1100" height="850" viewBox="0 0 1100 850" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid background pattern -->
+                <defs>
+                    <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="2.5" cy="2.5" r="1.5" class="grid-dot" />
+                    </pattern>
+                    <!-- Marker for Crow's Foot: One -->
+                    <marker id="marker-one" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <line x1="5" y1="1" x2="5" y2="9" stroke="currentColor" stroke-width="1.8"/>
+                    </marker>
+                    <!-- Marker for Crow's Foot: Many (Mandatory Many) -->
+                    <marker id="marker-many" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                        <!-- Fork prong lines -->
+                        <path d="M 2 2 L 10 5 L 2 8" fill="none" stroke="currentColor" stroke-width="1.5" />
+                        <!-- Vertical limit line -->
+                        <line x1="6" y1="1" x2="6" y2="9" stroke="currentColor" stroke-width="1.5"/>
+                    </marker>
+                </defs>
+
+                <!-- Background rect with grid -->
+                <rect id="grid-bg" width="100%" height="100%" fill="url(#gridPattern)" />
+
+                <!-- Group for connections/relationships -->
+                <g id="connections-group"></g>
+
+                <!-- Group for tables -->
+                <g id="tables-group"></g>
+            </svg>
+        </div>
+        
+        <div class="detail-panel" id="detailPanel">
+            <h3>📌 Detail Informasi Database</h3>
+            <div class="detail-content">
+                <div class="info-box">
+                    <h4 class="selected-table-header" id="selectedTableName">Klik Sebuah Tabel</h4>
+                    <p class="selected-table-desc" id="selectedTableDescription">Klik salah satu tabel di atas untuk memuat deskripsi tabel dan rincian parameter akademik.</p>
+                    <ul class="meta-list" id="selectedTableMeta">
+                        <li><span>Jumlah Kolom:</span> <span>-</span></li>
+                        <li><span>Primary Key:</span> <span>-</span></li>
+                        <li><span>Relasi Aktif:</span> <span>-</span></li>
+                    </ul>
+                </div>
+                <div class="info-box">
+                    <strong>Struktur Kolom &amp; Relasi Akademik:</strong>
+                    <div id="selectedTableDetails" style="margin-top: 10px; font-size: 0.82rem; max-height: 200px; overflow-y: auto;">
+                        Silakan klik salah satu tabel untuk melihat list tipe data dan kegunaannya dalam implementasi Skripsi.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database Schema Definition
+        const tablesData = [
+            {
+                id: "users",
+                name: "users",
+                x: 50,
+                y: 60,
+                width: 230,
+                desc: "Menyimpan data kredensial login pengguna sistem (Admin Gudang dan Owner) serta membatasi hak akses berdasarkan tingkat peranan (role).",
+                columns: [
+                    { name: "id", type: "BIGINT", key: "PK", desc: "Identifier unik untuk setiap akun pengguna" },
+                    { name: "name", type: "VARCHAR", key: "", desc: "Nama lengkap pengguna" },
+                    { name: "email", type: "VARCHAR", key: "", desc: "Kredensial email login (bersifat unik)" },
+                    { name: "password", type: "VARCHAR", key: "", desc: "Hash password keamanan akun" },
+                    { name: "role", type: "ENUM", key: "", desc: "Hak akses peranan pengguna" },
+                    { name: "remember_token", type: "VARCHAR", key: "", desc: "Token pengingat sesi login" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu pembuatan data akun" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu perubahan terakhir data akun" }
+                ]
+            },
+            {
+                id: "suppliers",
+                name: "suppliers",
+                x: 50,
+                y: 350,
+                width: 230,
+                desc: "Menyimpan informasi supplier/vendor penyuplai produk. Memuat informasi waktu pengiriman barang (Lead Time) untuk formula titik pesan kembali (ROP).",
+                columns: [
+                    { name: "id_supplier", type: "BIGINT", key: "PK", desc: "Identifier unik supplier barang" },
+                    { name: "nama_supplier", type: "VARCHAR", key: "", desc: "Nama perusahaan/pemasok" },
+                    { name: "alamat", type: "TEXT", key: "", desc: "Alamat fisik kantor supplier" },
+                    { name: "kontak_person", type: "VARCHAR", key: "", desc: "Nama penanggung jawab kontak" },
+                    { name: "lead_time_rata_rata", type: "INT", key: "", desc: "Nilai L (Hari) - Waktu tunggu pengiriman barang" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu pencatatan supplier" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu pembaruan data supplier" }
+                ]
+            },
+            {
+                id: "products",
+                name: "products",
+                x: 400,
+                y: 200,
+                width: 240,
+                desc: "Menyimpan data master barang dagang (SKU). Tabel ini menjadi jembatan pusat (central entity) antara transaksi penjualan, pembelian, dan perhitungan inventory control.",
+                columns: [
+                    { name: "id_barang", type: "BIGINT", key: "PK", desc: "Identifier unik barang (SKU)" },
+                    { name: "nama_barang", type: "VARCHAR", key: "", desc: "Nama produk variasi mobil" },
+                    { name: "kategori", type: "VARCHAR", key: "", desc: "Kategori kelompok barang" },
+                    { name: "harga_beli", type: "DECIMAL", key: "", desc: "Nilai pokok pembelian barang" },
+                    { name: "harga_jual", type: "DECIMAL", key: "", desc: "Harga jual eceran produk" },
+                    { name: "stok_saat_ini", type: "INT", key: "", desc: "Jumlah unit fisik di rak gudang saat ini" },
+                    { name: "satuan", type: "VARCHAR", key: "", desc: "Satuan kemasan barang (cth: pcs, set)" },
+                    { name: "id_supplier", type: "BIGINT", key: "FK", desc: "Menghubungkan ke tabel suppliers" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu pembuatan data barang" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu pembaruan data barang" }
+                ]
+            },
+            {
+                id: "sales",
+                name: "sales",
+                x: 770,
+                y: 350,
+                width: 230,
+                desc: "Menyimpan data riwayat transaksi penjualan eceran. Jumlah unit terjual digunakan sebagai data deret waktu (time series) dalam peramalan linear regression.",
+                columns: [
+                    { name: "id_penjualan", type: "BIGINT", key: "PK", desc: "Identifier unik struk penjualan" },
+                    { name: "id_barang", type: "BIGINT", key: "FK", desc: "Menunjuk pada produk yang terjual" },
+                    { name: "tanggal_keluar", type: "DATE", key: "", desc: "Tanggal waktu dilakukannya penjualan" },
+                    { name: "jumlah_terjual", type: "INT", key: "", desc: "Jumlah unit barang yang terjual" },
+                    { name: "total_harga", type: "DECIMAL", key: "", desc: "Total nominal pembayaran" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu rekam transaksi di database" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu edit transaksi penjualan" }
+                ]
+            },
+            {
+                id: "purchases",
+                name: "purchases",
+                x: 400,
+                y: 560,
+                width: 230,
+                desc: "Menyimpan riwayat pengadaan barang masuk dari supplier (restock). Digunakan untuk melacak restock barang.",
+                columns: [
+                    { name: "id_pembelian", type: "BIGINT", key: "PK", desc: "Identifier unik transaksi pembelian" },
+                    { name: "id_barang", type: "BIGINT", key: "FK", desc: "Menunjuk pada barang yang di-restock" },
+                    { name: "id_supplier", type: "BIGINT", key: "FK", desc: "Menunjuk pada supplier tempat memesan" },
+                    { name: "tanggal_masuk", type: "DATE", key: "", desc: "Tanggal barang masuk gudang" },
+                    { name: "jumlah_masuk", type: "INT", key: "", desc: "Volume unit barang yang dimasukkan" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu pembuatan berkas PO masuk" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu edit berkas pembelian" }
+                ]
+            },
+            {
+                id: "inventory_controls",
+                name: "inventory_controls",
+                x: 770,
+                y: 60,
+                width: 260,
+                desc: "Tabel inti kontrol inventori skripsi. Menyimpan hasil olah data peramalan volume penjualan, Safety Stock (SS), titik pemesanan ulang (ROP), dan Telegram alert status.",
+                columns: [
+                    { name: "id_control", type: "BIGINT", key: "PK", desc: "Identifier unik pengawas barang" },
+                    { name: "id_barang", type: "BIGINT", key: "FK", desc: "Relasi One-to-One eksklusif dengan tabel products" },
+                    { name: "hasil_regresi_linear", type: "FLOAT", key: "", desc: "Prediksi penjualan Y' untuk periode mendatang" },
+                    { name: "safety_stock", type: "INT", key: "", desc: "Stok pengaman cadangan (input manual owner)" },
+                    { name: "reorder_point", type: "INT", key: "", desc: "Nilai ROP = (d x L) + SS untuk patokan order ulang" },
+                    { name: "status_stok", type: "ENUM", key: "", desc: "Status persediaan terkini dibanding ROP" },
+                    { name: "diperbarui_pada", type: "TIMESTAMP", key: "", desc: "Waktu kalkulasi kalkulator ROP dijalankan" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu inisialisasi kontrol barang" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu pembaruan baris kontrol" }
+                ]
+            },
+            {
+                id: "services",
+                name: "services",
+                x: 50,
+                y: 610,
+                width: 230,
+                desc: "Menyimpan data catalog penawaran jasa pasang variasi mobil yang dipasang di Landing Page depan Budi Variasi.",
+                columns: [
+                    { name: "id", type: "BIGINT", key: "PK", desc: "Identifier unik jasa variasi" },
+                    { name: "title", type: "VARCHAR", key: "", desc: "Judul/Nama layanan variasi" },
+                    { name: "slug", type: "VARCHAR", key: "", desc: "Slug URL unik untuk routing landing page" },
+                    { name: "description", type: "TEXT", key: "", desc: "Deskripsi paket layanan variasi" },
+                    { name: "image", type: "VARCHAR", key: "", desc: "URL / Path file foto layanan" },
+                    { name: "price_range", type: "VARCHAR", key: "", desc: "Kisaran harga jasa (cth: Rp150rb - Rp300rb)" },
+                    { name: "is_active", type: "BOOLEAN", key: "", desc: "Status tayang layanan di Landing Page" },
+                    { name: "sort_order", type: "INT", key: "", desc: "Urutan tampilan layanan" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu pembuatan data layanan" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu pembaruan data layanan" }
+                ]
+            },
+            {
+                id: "testimonials",
+                name: "testimonials",
+                x: 770,
+                y: 590,
+                width: 260,
+                desc: "Menyimpan ulasan dari Google Maps API atau input admin toko yang berfungsi sebagai social proof pembeli untuk mendongkrak konversi landing page.",
+                columns: [
+                    { name: "id", type: "BIGINT", key: "PK", desc: "Identifier unik testimoni pelanggan" },
+                    { name: "name", type: "VARCHAR", key: "", desc: "Nama pelanggan pengirim ulasan" },
+                    { name: "review_text", type: "TEXT", key: "", desc: "Isi ulasan pelanggan" },
+                    { name: "rating", type: "TINYINT", key: "", desc: "Skala rating kepuasan (1-5 bintang)" },
+                    { name: "profile_photo_url", type: "VARCHAR", key: "", desc: "URL foto profil pengirim ulasan" },
+                    { name: "source", type: "VARCHAR", key: "", desc: "Sumber ulasan (Google Maps / Manual)" },
+                    { name: "relative_time_description", type: "VARCHAR", key: "", desc: "Keterangan waktu (cth: '2 minggu yang lalu')" },
+                    { name: "is_displayed", type: "BOOLEAN", key: "", desc: "Status filter tampil di landing page" },
+                    { name: "created_at", type: "TIMESTAMP", key: "", desc: "Waktu penarikan data testimoni" },
+                    { name: "updated_at", type: "TIMESTAMP", key: "", desc: "Waktu pembaruan data testimoni" }
+                ]
+            }
+        ];
+
+        const relationsData = [
+            { from: "suppliers", to: "products", fromKey: "id_supplier", toKey: "id_supplier", type: "1-N", label: "Penyuplai Barang" },
+            { from: "products", to: "sales", fromKey: "id_barang", toKey: "id_barang", type: "1-N", label: "Transaksi Penjualan" },
+            { from: "products", to: "purchases", fromKey: "id_barang", toKey: "id_barang", type: "1-N", label: "Restock Barang" },
+            { from: "suppliers", to: "purchases", fromKey: "id_supplier", toKey: "id_supplier", type: "1-N", label: "Suplai Pembelian" },
+            { from: "products", to: "inventory_controls", fromKey: "id_barang", toKey: "id_barang", type: "1-1", label: "Pengawasan ROP & Regresi" },
+            { from: "users", to: "products", fromKey: "id", toKey: "(Konseptual)", type: "1-N", label: "Mengelola Produk" },
+            { from: "users", to: "suppliers", fromKey: "id", toKey: "(Konseptual)", type: "1-N", label: "Mengelola Supplier" },
+            { from: "users", to: "sales", fromKey: "id", toKey: "(Konseptual)", type: "1-N", label: "Mencatat Penjualan" },
+            { from: "users", to: "inventory_controls", fromKey: "id", toKey: "(Konseptual)", type: "1-1", label: "Mengatur Parameter ROP" },
+            { from: "users", to: "services", fromKey: "id", toKey: "(Konseptual)", type: "1-N", label: "Mengelola Layanan" },
+            { from: "users", to: "testimonials", fromKey: "id", toKey: "(Konseptual)", type: "1-N", label: "Memoderasi Ulasan" }
+        ];
+
+        // Store layouts for resets
+        const defaultPositions = JSON.parse(JSON.stringify(tablesData));
+
+        // Dragging State variables
+        let activeTable = null;
+        let startX = 0;
+        let startY = 0;
+        let currentX = 0;
+        let currentY = 0;
+
+        // Init page elements
+        const svg = document.getElementById("erd-svg");
+        const tablesGroup = document.getElementById("tables-group");
+        const connectionsGroup = document.getElementById("connections-group");
+
+        // Load visual configurations on boot
+        document.addEventListener("DOMContentLoaded", () => {
+            // Apply default style selection class to SVG
+            updateErdStyle();
+            updateErdFont();
+            renderErd();
+        });
+
+        // Toggle page theme (dark/light)
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById("themeBtn");
+            body.classList.toggle("theme-light");
+            
+            if (body.classList.contains("theme-light")) {
+                btn.textContent = "🌓 Mode Gelap";
+            } else {
+                btn.textContent = "🌓 Mode Terang (Cetak)";
+            }
+        }
+
+        // Update ERD Visual Class style
+        function updateErdStyle() {
+            const style = document.getElementById("styleSelect").value;
+            // Clear current classes
+            svg.classList.remove("style-academic", "style-modern-bw", "style-dark", "theme-dark-canvas");
+            
+            // Apply select style
+            svg.classList.add("style-" + style);
+            if (style === 'dark') {
+                svg.classList.add("theme-dark-canvas");
+                svg.style.backgroundColor = "#080d1a";
+            } else {
+                svg.style.backgroundColor = "#ffffff";
+            }
+            renderErd();
+        }
+
+        // Update ERD Font class
+        function updateErdFont() {
+            const font = document.getElementById("fontSelect").value;
+            svg.classList.remove("font-sans", "font-serif");
+            svg.classList.add("font-" + font);
+        }
+
+        // Reset positions
+        function resetLayout() {
+            tablesData.forEach(t => {
+                const def = defaultPositions.find(d => d.id === t.id);
+                if (def) {
+                    t.x = def.x;
+                    t.y = def.y;
+                }
+            });
+            renderErd();
+        }
+
+        // Render the tables and connection lines
+        function renderErd() {
+            // Clear groups
+            tablesGroup.innerHTML = "";
+            connectionsGroup.innerHTML = "";
+
+            // Calculate heights dynamic
+            tablesData.forEach(table => {
+                table.height = 35 + table.columns.length * 22 + 10;
+            });
+
+            // 1. Render Connections first (so they are under tables)
+            relationsData.forEach((rel, index) => {
+                const tableFrom = tablesData.find(t => t.id === rel.from);
+                const tableTo = tablesData.find(t => t.id === rel.to);
+
+                if (tableFrom && tableTo) {
+                    const conn = getConnectorPath(tableFrom, tableTo);
+                    
+                    // Create path element
+                    const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    pathEl.setAttribute("d", conn.path);
+                    pathEl.setAttribute("class", "connector-line");
+                    pathEl.setAttribute("fill", "none");
+                    
+                    // Set markers based on relationship type
+                    pathEl.setAttribute("marker-start", "url(#marker-one)");
+                    if (rel.type === "1-N") {
+                        pathEl.setAttribute("marker-end", "url(#marker-many)");
+                    } else {
+                        pathEl.setAttribute("marker-end", "url(#marker-one)");
+                    }
+
+                    // Tooltip click highlight for relationships
+                    pathEl.style.cursor = "pointer";
+                    pathEl.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        showRelationDetails(rel);
+                    });
+
+                    connectionsGroup.appendChild(pathEl);
+                }
+            });
+
+            // 2. Render Tables
+            tablesData.forEach(table => {
+                const tableGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                tableGroup.setAttribute("id", `table-${table.id}`);
+                tableGroup.setAttribute("transform", `translate(${table.x}, ${table.y})`);
+
+                // Main card background
+                const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                bg.setAttribute("class", "table-card");
+                bg.setAttribute("width", table.width);
+                bg.setAttribute("height", table.height);
+                bg.setAttribute("rx", "6");
+                tableGroup.appendChild(bg);
+
+                // Header background
+                const headerBg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                headerBg.setAttribute("class", "table-header-bg");
+                headerBg.setAttribute("width", table.width);
+                headerBg.setAttribute("height", "35");
+                headerBg.setAttribute("rx", "6");
+                tableGroup.appendChild(headerBg);
+
+                // Header Title text
+                const headerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                headerText.setAttribute("class", "table-name");
+                headerText.setAttribute("x", table.width / 2);
+                headerText.setAttribute("y", "22");
+                headerText.setAttribute("text-anchor", "middle");
+                headerText.textContent = table.name.toUpperCase();
+                tableGroup.appendChild(headerText);
+
+                // Header separator line
+                const headerSep = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                headerSep.setAttribute("class", "table-header-sep");
+                headerSep.setAttribute("x1", "0");
+                headerSep.setAttribute("y1", "35");
+                headerSep.setAttribute("x2", table.width);
+                headerSep.setAttribute("y2", "35");
+                tableGroup.appendChild(headerSep);
+
+                // Render Columns
+                table.columns.forEach((col, idx) => {
+                    const colY = 35 + idx * 22 + 16;
+                    
+                    const colGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    colGroup.setAttribute("transform", `translate(0, ${colY})`);
+
+                    // 1. Key badge if any
+                    if (col.key) {
+                        const badgeBg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        badgeBg.setAttribute("class", "col-key-badge-bg");
+                        badgeBg.setAttribute("x", "10");
+                        badgeBg.setAttribute("y", "-11");
+                        
+                        const isMultiKey = col.key.includes(",");
+                        badgeBg.setAttribute("width", isMultiKey ? "36" : "20");
+                        badgeBg.setAttribute("height", "14");
+                        badgeBg.setAttribute("rx", "3");
+                        colGroup.appendChild(badgeBg);
+
+                        const badgeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        badgeText.setAttribute("class", "col-key-text");
+                        badgeText.setAttribute("x", isMultiKey ? "28" : "20");
+                        badgeText.setAttribute("y", "0");
+                        badgeText.setAttribute("text-anchor", "middle");
+                        badgeText.textContent = col.key;
+                        colGroup.appendChild(badgeText);
+                    }
+
+                    // 2. Column Name
+                    const nameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    nameText.setAttribute("class", col.key === "PK" ? "col-name col-name-pk" : "col-name");
+                    // Indent if has key badge
+                    nameText.setAttribute("x", col.key ? (col.key.includes(",") ? "52" : "36") : "14");
+                    nameText.setAttribute("y", "0");
+                    nameText.textContent = col.name;
+                    colGroup.appendChild(nameText);
+
+                    // 3. Column Type
+                    const typeText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    typeText.setAttribute("class", "col-type");
+                    typeText.setAttribute("x", table.width - 12);
+                    typeText.setAttribute("y", "0");
+                    typeText.setAttribute("text-anchor", "end");
+                    typeText.textContent = col.type.toLowerCase();
+                    colGroup.appendChild(typeText);
+
+                    tableGroup.appendChild(colGroup);
+                });
+
+                // Invisible drag handle overlay on Header
+                const dragHandle = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                dragHandle.setAttribute("width", table.width);
+                dragHandle.setAttribute("height", "35");
+                dragHandle.setAttribute("fill", "transparent");
+                dragHandle.setAttribute("class", "table-header-group");
+                
+                // Add event listeners for Dragging
+                dragHandle.addEventListener("mousedown", (e) => startDrag(e, table));
+                dragHandle.addEventListener("touchstart", (e) => startDrag(e, table));
+
+                // Table click listener to show description details
+                tableGroup.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    showTableDetails(table);
+                });
+                
+                tableGroup.appendChild(dragHandle);
+                tablesGroup.appendChild(tableGroup);
+            });
+        }
+
+        // Snap edge calculations for drawing connections
+        function getConnectorPath(rectA, rectB) {
+            const wA = rectA.width;
+            const hA = rectA.height;
+            const wB = rectB.width;
+            const hB = rectB.height;
+            
+            const cxA = rectA.x + wA / 2;
+            const cyA = rectA.y + hA / 2;
+            const cxB = rectB.x + wB / 2;
+            const cyB = rectB.y + hB / 2;
+            
+            let x1, y1, x2, y2;
+            
+            // Check if horizontal layout distance is bigger than vertical
+            if (Math.abs(cxA - cxB) > Math.abs(cyA - cyB)) {
+                if (cxA < cxB) {
+                    x1 = rectA.x + wA; y1 = cyA;
+                    x2 = rectB.x;      y2 = cyB;
+                } else {
+                    x1 = rectA.x;      y1 = cyA;
+                    x2 = rectB.x + wB; y2 = cyB;
+                }
+                const midX = (x1 + x2) / 2;
+                return {
+                    path: `M ${x1} ${y1} H ${midX} V ${y2} H ${x2}`,
+                    start: { x: x1, y: y1 },
+                    end: { x: x2, y: y2 }
+                };
+            } else {
+                if (cyA < cyB) {
+                    x1 = cxA; y1 = rectA.y + hA;
+                    x2 = cxB; y2 = rectB.y;
+                } else {
+                    x1 = cxA; y1 = rectA.y;
+                    x2 = cxB; y2 = rectB.y + hB;
+                }
+                const midY = (y1 + y2) / 2;
+                return {
+                    path: `M ${x1} ${y1} V ${midY} H ${x2} V ${y2}`,
+                    start: { x: x1, y: y1 },
+                    end: { x: x2, y: y2 }
+                };
+            }
+        }
+
+        // Drag handlers
+        function startDrag(e, table) {
+            e.preventDefault();
+            activeTable = table;
+            
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            // Compute offset from top-left corner
+            startX = clientX - table.x;
+            startY = clientY - table.y;
+
+            // Attach document-wide move & up events
+            document.addEventListener("mousemove", dragMove);
+            document.addEventListener("mouseup", endDrag);
+            document.addEventListener("touchmove", dragMove, { passive: false });
+            document.addEventListener("touchend", endDrag);
+        }
+
+        function dragMove(e) {
+            if (!activeTable) return;
+            if (e.cancelable) e.preventDefault();
+
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            let newX = clientX - startX;
+            let newY = clientY - startY;
+
+            // Restrict positions within canvas box boundaries
+            const canvasWidth = 1100;
+            const canvasHeight = 850;
+            newX = Math.max(0, Math.min(newX, canvasWidth - activeTable.width));
+            newY = Math.max(0, Math.min(newY, canvasHeight - activeTable.height));
+
+            // Update database position coordinate
+            activeTable.x = newX;
+            activeTable.y = newY;
+
+            // Fast DOM positioning update
+            const tableEl = document.getElementById(`table-${activeTable.id}`);
+            if (tableEl) {
+                tableEl.setAttribute("transform", `translate(${newX}, ${newY})`);
+            }
+
+            // Redraw line paths dynamically
+            redrawLines();
+        }
+
+        function redrawLines() {
+            const paths = connectionsGroup.querySelectorAll("path");
+            relationsData.forEach((rel, index) => {
+                const tableFrom = tablesData.find(t => t.id === rel.from);
+                const tableTo = tablesData.find(t => t.id === rel.to);
+                
+                if (tableFrom && tableTo && paths[index]) {
+                    const conn = getConnectorPath(tableFrom, tableTo);
+                    paths[index].setAttribute("d", conn.path);
+                }
+            });
+        }
+
+        function endDrag() {
+            activeTable = null;
+            document.removeEventListener("mousemove", dragMove);
+            document.removeEventListener("mouseup", endDrag);
+            document.removeEventListener("touchmove", dragMove);
+            document.removeEventListener("touchend", endDrag);
+            // Complete re-render for clean hierarchy order
+            renderErd();
+        }
+
+        // Show details in info panel
+        function showTableDetails(table) {
+            // Highlight selected table
+            document.querySelectorAll(".table-card").forEach(c => c.style.strokeWidth = "1.5px");
+            const selectedRect = document.querySelector(`#table-${table.id} .table-card`);
+            if (selectedRect) {
+                selectedRect.style.strokeWidth = "3px";
+                selectedRect.style.stroke = "var(--accent-color)";
+            }
+
+            document.getElementById("selectedTableName").textContent = `tabel: ${table.name}`;
+            document.getElementById("selectedTableDescription").textContent = table.desc;
+
+            // Set metadata list
+            const PKColumn = table.columns.find(c => c.key === "PK")?.name || "-";
+            const rels = relationsData.filter(r => r.from === table.id || r.to === table.id);
+            
+            document.getElementById("selectedTableMeta").innerHTML = `
+                <li><span>Nama Fisik Tabel:</span> <span>${table.name}</span></li>
+                <li><span>Jumlah Kolom:</span> <span>${table.columns.length} Kolom</span></li>
+                <li><span>Primary Key (PK):</span> <span><code>${PKColumn}</code></span></li>
+                <li><span>Jumlah Relasi:</span> <span>${rels.length} Hubungan</span></li>
+            `;
+
+            // Draw columns detail list
+            let html = `
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border-color); font-weight: bold;">
+                            <th style="padding: 6px;">Kunci</th>
+                            <th style="padding: 6px;">Nama Kolom</th>
+                            <th style="padding: 6px;">Tipe Data</th>
+                            <th style="padding: 6px;">Keterangan Akademik</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            table.columns.forEach(col => {
+                html += `
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 6px; font-weight: bold; color: var(--accent-color);">${col.key || '-'}</td>
+                        <td style="padding: 6px;"><code>${col.name}</code></td>
+                        <td style="padding: 6px; font-size: 0.78rem;"><code>${col.type.toLowerCase()}</code></td>
+                        <td style="padding: 6px; color: var(--text-muted); font-size: 0.78rem;">${col.desc}</td>
+                    </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+            document.getElementById("selectedTableDetails").innerHTML = html;
+        }
+
+        function showRelationDetails(rel) {
+            document.getElementById("selectedTableName").textContent = `Hubungan Relasional`;
+            document.getElementById("selectedTableDescription").textContent = 
+                `Relasi menghubungkan entitas '${rel.from}' dengan entitas '${rel.to}' melalui primary/foreign key.`;
+
+            document.getElementById("selectedTableMeta").innerHTML = `
+                <li><span>Dari Entitas (Parent):</span> <span><code>${rel.from}</code></span></li>
+                <li><span>Ke Entitas (Child):</span> <span><code>${rel.to}</code></span></li>
+                <li><span>Kunci Penghubung:</span> <span><code>${rel.fromKey}</code> = <code>${rel.toKey}</code></span></li>
+                <li><span>Kardinalitas Relasi:</span> <span><code>${rel.type}</code></span></li>
+            `;
+
+            let typeExplanation = "";
+            if (rel.type === "1-N") {
+                typeExplanation = `Satu baris data pada tabel <strong>${rel.from}</strong> dapat diasosiasikan ke banyak (N) baris data pada tabel child <strong>${rel.to}</strong>. Sebagai contoh, satu supplier dapat mensuplai banyak barang yang berbeda.`;
+            } else if (rel.type === "1-1") {
+                typeExplanation = `Satu baris data pada tabel <strong>${rel.from}</strong> diasosiasikan secara eksklusif tepat ke satu (1) baris data pada tabel <strong>${rel.to}</strong>. Hal ini membatasi satu produk hanya memiliki satu baris status pantauan inventory control (Regresi Linear &amp; ROP).`;
+            }
+
+            document.getElementById("selectedTableDetails").innerHTML = `
+                <div style="padding: 8px; border-left: 3px solid var(--accent-color); background-color: var(--bg-viewport); line-height: 1.5;">
+                    <strong>Fungsi Hubungan:</strong> ${rel.label}<br>
+                    <p style="margin-top: 6px; color: var(--text-muted); font-size: 0.78rem;">${typeExplanation}</p>
+                </div>
+            `;
+        }
+
+        // Export high-definition PNG
+        function downloadAsPng() {
+            const style = document.getElementById("styleSelect").value;
+            const font = document.getElementById("fontSelect").value;
+            
+            // Hide grid pattern momentarily for high-definition export
+            const gridPattern = document.getElementById("gridPattern");
+            const gridBg = document.getElementById("grid-bg");
+            
+            // Save grid state and remove background pattern fill
+            gridBg.setAttribute("fill", "#ffffff");
+            if (style === 'dark') {
+                gridBg.setAttribute("fill", "#080d1a");
+            }
+
+            const scale = 2.0; // 2x scale for HD quality print-ready
+            const width = 1100;
+            const height = 850;
+
+            const svgClone = svg.cloneNode(true);
+
+            // Inject inline styles directly into the cloned SVG so Canvas draws them properly
+            const styleElement = document.createElementNS("http://www.w3.org/2000/svg", "style");
+            
+            // CSS Rules mapping directly to our theme and layout
+            let styleContent = `
+                text { font-family: ${font === 'serif' ? "'Times New Roman', Times, serif" : "Arial, sans-serif"} !important; }
+                .table-card { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                .table-header-bg { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                .table-header-sep { stroke: #000000 !important; stroke-width: 2px !important; }
+                .table-name { fill: #000000 !important; font-weight: bold !important; font-size: 14px !important; text-anchor: middle !important; }
+                .col-name { fill: #000000 !important; font-size: 11.5px !important; }
+                .col-name-pk { font-weight: bold !important; text-decoration: underline !important; }
+                .col-type { fill: #555555 !important; font-size: 10px !important; text-anchor: end !important; }
+                .col-key-badge-bg { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1px !important; }
+                .col-key-text { fill: #000000 !important; font-weight: bold !important; font-size: 9px !important; text-anchor: middle !important; }
+                .connector-line { fill: none !important; stroke: #000000 !important; stroke-width: 1.8px !important; }
+            `;
+
+            // Adjust styles if user selected Modern B&W
+            if (style === 'modern-bw') {
+                styleContent = `
+                    text { font-family: ${font === 'serif' ? "'Times New Roman', Times, serif" : "Arial, sans-serif"} !important; }
+                    .table-card { fill: #ffffff !important; stroke: #0f172a !important; stroke-width: 1.5px !important; }
+                    .table-header-bg { fill: #0f172a !important; stroke: none !important; }
+                    .table-header-sep { stroke: none !important; }
+                    .table-name { fill: #ffffff !important; font-weight: bold !important; font-size: 13px !important; text-anchor: middle !important; }
+                    .col-name { fill: #0f172a !important; font-size: 11.5px !important; }
+                    .col-name-pk { font-weight: bold !important; }
+                    .col-type { fill: #64748b !important; font-size: 10px !important; text-anchor: end !important; }
+                    .col-key-badge-bg { fill: #f1f5f9 !important; stroke: none !important; }
+                    .col-key-text { fill: #475569 !important; font-weight: bold !important; font-size: 8.5px !important; text-anchor: middle !important; }
+                    .connector-line { fill: none !important; stroke: #1e293b !important; stroke-width: 1.8px !important; }
+                `;
+            } else if (style === 'dark') {
+                styleContent = `
+                    text { font-family: ${font === 'serif' ? "'Times New Roman', Times, serif" : "Arial, sans-serif"} !important; }
+                    .table-card { fill: #0b1329 !important; stroke: #1e293b !important; stroke-width: 1.5px !important; }
+                    .table-header-bg { fill: #1e293b !important; stroke: none !important; }
+                    .table-header-sep { stroke: none !important; }
+                    .table-name { fill: #f1f5f9 !important; font-weight: bold !important; font-size: 13px !important; text-anchor: middle !important; }
+                    .col-name { fill: #f1f5f9 !important; font-size: 11.5px !important; }
+                    .col-name-pk { font-weight: bold !important; }
+                    .col-type { fill: #64748b !important; font-size: 10px !important; text-anchor: end !important; }
+                    .col-key-badge-bg { fill: #1e293b !important; stroke: none !important; }
+                    .col-key-text { fill: #3b82f6 !important; font-weight: bold !important; font-size: 8.5px !important; text-anchor: middle !important; }
+                    .connector-line { fill: none !important; stroke: #3b82f6 !important; stroke-width: 2px !important; }
+                `;
+            }
+
+            styleElement.textContent = styleContent;
+            svgClone.insertBefore(styleElement, svgClone.firstChild);
+
+            // Serialize to SVG String
+            const svgString = new XMLSerializer().serializeToString(svgClone);
+            const svgBase64 = btoa(unescape(encodeURIComponent(svgString)));
+            const imgSrc = 'data:image/svg+xml;base64,' + svgBase64;
+
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                
+                const ctx = canvas.getContext('2d');
+                // Set Canvas scale
+                ctx.scale(scale, scale);
+
+                // Fill background
+                ctx.fillStyle = (style === 'dark') ? "#080d1a" : "#ffffff";
+                ctx.fillRect(0, 0, width, height);
+
+                // Draw SVG image
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Export to PNG dataURL
+                const dataUrl = canvas.toDataURL('image/png');
+
+                // Trigger file download
+                const link = document.createElement('a');
+                link.download = `erd_database_budi_variasi_${style}.png`;
+                link.href = dataUrl;
+                link.click();
+
+                // Restore canvas grid pattern in workspace
+                gridBg.setAttribute("fill", "url(#gridPattern)");
+            };
+            
+            img.onerror = function() {
+                // Restore in case of load failure
+                gridBg.setAttribute("fill", "url(#gridPattern)");
+                alert("Gagal memproses gambar ERD. Silakan coba kembali.");
+            };
+            
+            img.src = imgSrc;
+        }
+    </script>
+</body>
+</html>

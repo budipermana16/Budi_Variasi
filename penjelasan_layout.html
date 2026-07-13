@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panduan & Penjelasan Layout — Sidang Skripsi Budi Variasi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #070a13;
+            --bg-card: #0e1424;
+            --bg-sidebar: #0b0f1a;
+            --border-color: rgba(255, 255, 255, 0.06);
+            --border-hover: rgba(59, 130, 246, 0.3);
+            --text-main: #94a3b8;
+            --text-light: #f8fafc;
+            --text-muted: #64748b;
+            
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.15);
+            --secondary: #06b6d4;
+            --accent: #6366f1;
+            --success: #10b981;
+            --danger: #f43f5e;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            min-h: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-b: 1px solid var(--border-color);
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .brand-text h1 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+        }
+
+        .brand-text span {
+            font-size: 0.75rem;
+            color: var(--primary);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--text-light);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .nav-item.active {
+            color: var(--text-light);
+            background: linear-gradient(90deg, var(--primary-glow), transparent);
+            border-color: var(--border-hover);
+        }
+
+        .nav-item.active .nav-icon {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-t: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* Main Content Container */
+        .main-content {
+            margin-left: 280px;
+            flex-grow: 1;
+            padding: 40px 60px;
+            max-width: 1200px;
+        }
+
+        /* Header section */
+        .content-header {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .content-header::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background-color: var(--primary-glow);
+            color: var(--primary);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .badge-danger {
+            background-color: rgba(244, 63, 94, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(244, 63, 94, 0.2);
+        }
+
+        .badge-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .content-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .content-header p {
+            font-size: 1.05rem;
+            color: var(--text-main);
+        }
+
+        /* Tabs Panels */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards Layout */
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title .icon {
+            color: var(--secondary);
+        }
+
+        /* Grid */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Code Blocks styling */
+        .code-header {
+            background-color: #0b0f1a;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 12px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .code-header .file-path {
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .code-container {
+            position: relative;
+            background-color: #05070f;
+            border: 1px solid var(--border-color);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        pre {
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            padding: 20px;
+            overflow-x: auto;
+            color: #d1d5db;
+        }
+
+        .keyword { color: #f472b6; }
+        .function { color: #60a5fa; }
+        .string { color: #34d399; }
+        .comment { color: #64748b; font-style: italic; }
+        .tag { color: #fb7185; }
+        .attr { color: #fb923c; }
+
+        /* Custom Wireframe Diagrams */
+        .wireframe-container {
+            background-color: #05070d;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-family: inherit;
+            margin-bottom: 24px;
+        }
+
+        .wireframe-element {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1.5px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .wireframe-element:hover {
+            background-color: var(--primary-glow);
+            border-color: var(--primary);
+            color: var(--text-light);
+            transform: scale(1.01);
+        }
+
+        .wireframe-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        /* Specific Wireframe Mimics */
+        .wf-main-grid {
+            display: flex;
+            height: 380px;
+            gap: 12px;
+        }
+
+        .wf-sidebar {
+            width: 30%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .wf-content-area {
+            width: 70%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .wf-header {
+            height: 50px;
+        }
+
+        .wf-body {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-style: solid;
+            background-color: rgba(59, 130, 246, 0.03);
+            border-color: rgba(59, 130, 246, 0.2);
+            color: var(--primary);
+            font-size: 0.85rem;
+        }
+
+        .wf-footer {
+            height: 40px;
+        }
+
+        /* Q&A Accordion styling */
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .qa-item {
+            background-color: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .qa-item:hover {
+            border-color: var(--border-hover);
+        }
+
+        .qa-question {
+            padding: 20px 24px;
+            font-weight: 700;
+            color: var(--text-light);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        .qa-question::after {
+            content: '+';
+            font-size: 1.3rem;
+            color: var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .qa-item.open .qa-question::after {
+            transform: rotate(45deg);
+        }
+
+        .qa-answer {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            border-top: 1px solid transparent;
+        }
+
+        .qa-item.open .qa-answer {
+            padding: 20px 24px;
+            max-height: 500px;
+            border-top: 1px solid var(--border-color);
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .tip-box {
+            background-color: rgba(16, 185, 129, 0.04);
+            border: 1px dashed var(--success);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 12px;
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #a7f3d0;
+        }
+
+        .tip-box strong {
+            color: var(--success);
+        }
+
+        .danger-box {
+            background-color: rgba(244, 63, 94, 0.04);
+            border: 1px dashed var(--danger);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-top: 12px;
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: #fecdd3;
+        }
+
+        .danger-box strong {
+            color: var(--danger);
+        }
+
+        /* Lists */
+        ul.custom-list {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        ul.custom-list li {
+            position: relative;
+            padding-left: 24px;
+        }
+
+        ul.custom-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .highlight-text {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        table.layout-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.85rem;
+        }
+
+        table.layout-table th, table.layout-table td {
+            padding: 14px 18px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        table.layout-table th {
+            color: var(--text-light);
+            background-color: rgba(255, 255, 255, 0.02);
+            font-weight: 700;
+        }
+
+        table.layout-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        /* Floating Info Widget */
+        .info-widget {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 24px;
+            background-color: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .info-widget-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .info-widget-text h4 {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .info-widget-text p {
+            font-size: 0.8rem;
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <div class="brand-logo">
+            <div class="brand-icon">B</div>
+            <div class="brand-text">
+                <h1>Budi Variasi</h1>
+                <span>Thesis Layout Guide</span>
+            </div>
+        </div>
+        
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="switchTab('overview')">
+                <span class="nav-icon">💡</span> Arsitektur SPA & Alur
+            </li>
+            <li class="nav-item" onclick="switchTab('master')">
+                <span class="nav-icon">📄</span> Master Layout (Blade)
+            </li>
+            <li class="nav-item" onclick="switchTab('admin')">
+                <span class="nav-icon">⚙️</span> Layout Admin (React)
+            </li>
+            <li class="nav-item" onclick="switchTab('landing')">
+                <span class="nav-icon">🏠</span> Layout Landing Page
+            </li>
+            <li class="nav-item" onclick="switchTab('login')">
+                <span class="nav-icon">🔒</span> Layout Login
+            </li>
+            <li class="nav-item" onclick="switchTab('sidang')">
+                <span class="nav-icon">🎓</span> Bank Tanya-Jawab Sidang
+            </li>
+            <li class="nav-item" onclick="switchTab('menu-map')">
+                <span class="nav-icon">🗺️</span> Peta Lokasi Menu
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <p>Dibuat untuk Sidang Skripsi</p>
+            <p style="font-weight: 700; color: var(--text-light); margin-top: 4px;">Budi Variasi Mobil</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- ================= OVERVIEW TAB ================= -->
+        <div id="overview" class="tab-panel active">
+            <div class="content-header">
+                <span class="badge">Arsitektur Web</span>
+                <h2>Struktur & Arsitektur Layout Aplikasi</h2>
+                <p>Pemahaman dasar interaksi Laravel, Inertia.js, dan React SPA pada sistem Budi Variasi.</p>
+            </div>
+
+            <div class="info-widget">
+                <div class="info-widget-icon">⚡</div>
+                <div class="info-widget-text">
+                    <h4>Penting Untuk Presentasi Sidang</h4>
+                    <p>Web ini dibuat menggunakan konsep <strong>Single Page Application (SPA)</strong>. Tidak seperti web multi-page tradisional yang memuat ulang seluruh halaman saat ganti menu, SPA hanya memuat ulang bagian konten (children) saja.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">🔗</span> Bagaimana Laravel Berinteraksi dengan React?</h3>
+                <p style="margin-bottom: 16px;">Sistem ini dihubungkan oleh <strong>Inertia.js</strong>. Di dalam skripsi Anda, pastikan untuk menjelaskan alur ini kepada penguji:</p>
+                
+                <ul class="custom-list" style="margin-bottom: 24px;">
+                    <li><span class="highlight-text">Laravel</span> bertindak murni sebagai <strong>Back-End</strong> (menyediakan routing, controller logika bisnis, kalkulasi ROP dengan Regresi Linear, dan database ORM Eloquent).</li>
+                    <li><span class="highlight-text">React (JSX)</span> bertindak murni sebagai <strong>Front-End / User Interface</strong> yang bersifat dinamis dan reaktif.</li>
+                    <li><span class="highlight-text">Inertia.js</span> adalah <strong>"Jembatan" (Adapter)</strong> yang mengirimkan data dari Controller Laravel ke komponen React dalam bentuk <code>props</code> tanpa perlu membangun API RESTful yang rumit.</li>
+                </ul>
+
+                <h4 style="color: var(--text-light); margin-bottom: 12px; font-size: 0.95rem;">Diagram Alur Request (SPA Router):</h4>
+                <div class="wireframe-container" style="padding: 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; line-height: 1.8;">
+                    <div style="color: var(--secondary);">[Browser/Client]</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;│ (mengklik link internal, misal /admin/products)</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;▼</div>
+                    <div style="color: var(--primary);">[Inertia.js Link Interceptor]</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;│ (mencegah browser melakukan reload halaman penuh, mengirim request AJAX khusus)</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;▼</div>
+                    <div style="color: var(--success);">[Laravel Back-End (Router & Controller)]</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;│ (mengeksekusi logika, mengambil data produk, menghitung stok kritis)</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;▼</div>
+                    <div style="color: var(--secondary);">[Inertia Response (JSON payload)]</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;│ (mengirim data produk balik ke client)</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;▼</div>
+                    <div style="color: var(--accent);">[React Virtual DOM Update]</div>
+                    <div style="color: var(--text-muted);">&nbsp;&nbsp;&nbsp;&nbsp;(merender ulang bagian konten utama dalam AdminLayout secara instan)</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">📂</span> Ringkasan File Layout Website</h3>
+                <p style="margin-bottom: 20px;">Berikut adalah tabel ringkasan letak file layout beserta peranan utamanya di dalam project:</p>
+
+                <table class="layout-table">
+                    <thead>
+                        <tr>
+                            <th>Nama File</th>
+                            <th>Lokasi Fisik / Path</th>
+                            <th>Fungsi Utama</th>
+                            <th>Kategori</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="highlight-text">app.blade.php</td>
+                            <td><code>resources/views/app.blade.php</code></td>
+                            <td>Master HTML server-side tempat aplikasi React dimuat pertama kali.</td>
+                            <td>Laravel Blade (Server-side)</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">AdminLayout.jsx</td>
+                            <td><code>resources/js/Layouts/AdminLayout.jsx</code></td>
+                            <td>Layout panel administrasi (Sidebar, Header/Topbar, Footer, Hak Akses, Stok Kritis).</td>
+                            <td>React JSX (Client-side Layout)</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">Home.jsx</td>
+                            <td><code>resources/js/Pages/Home.jsx</code></td>
+                            <td>Landing page interaktif untuk pengunjung publik (Layanan, Ulasan, Lokasi Google Maps).</td>
+                            <td>React Page & Self-Layout</td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">Login.jsx</td>
+                            <td><code>resources/js/Pages/Auth/Login.jsx</code></td>
+                            <td>Halaman autentikasi administrator dengan split-panel infografis fitur sistem.</td>
+                            <td>React Page (Standalone)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ================= MASTER TAB ================= -->
+        <div id="master" class="tab-panel">
+            <div class="content-header">
+                <span class="badge">Blade Template</span>
+                <h2>Master Layout (Server-Side)</h2>
+                <p>Kerangka dasar HTML pertama yang dimuat oleh server sebelum dialihkan sepenuhnya ke React.</p>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card">
+                        <h3 class="card-title"><span class="icon">📍</span> Lokasi & Detail File</h3>
+                        <p style="margin-bottom: 16px;"><strong>Lokasi File:</strong><br><code style="color: var(--secondary); background: #05070d; padding: 4px 8px; border-radius: 4px;">resources/views/app.blade.php</code></p>
+                        
+                        <p style="margin-bottom: 16px;"><strong>Penjelasan:</strong><br>
+                        Ini adalah satu-satunya file template Blade (HTML berbasis PHP) yang digunakan oleh aplikasi saat pertama kali diakses. Semua aset JavaScript dan CSS dideklarasikan di sini. Laravel hanya merender file ini satu kali, kemudian React mengambil alih siklus navigasi halaman berikutnya.</p>
+
+                        <div class="tip-box">
+                            <div><strong>💡 Tip Sidang:</strong><br>Jika dosen bertanya: <em>"Di mana element root React di-mount?"</em>. Jawablah: <em>"Di baris 12 menggunakan direktif <code>@inertia</code>, yang akan otomatis merender tag <code>&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;</code> di browser."</em></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="code-header">
+                        <span>Blade Code</span>
+                        <span>app.blade.php</span>
+                    </div>
+                    <div class="code-container">
+                        <pre><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="string">"{{ str_replace('_', '-', app()-&gt;getLocale()) }}"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;meta</span> <span class="attr">viewport</span>=<span class="string">"width=device-width, initial-scale=1"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;title</span> <span class="attr">inertia</span><span class="tag">&gt;</span>{{ config('app.name', 'Laravel') }}<span class="tag">&lt;/title&gt;</span>
+        
+        <span class="comment">@viteReactRefresh</span>
+        <span class="comment">@vite(['resources/css/app.css', 'resources/js/app.jsx'])</span>
+        <span class="comment">@inertiaHead</span>
+    <span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body</span> <span class="attr">class</span>=<span class="string">"font-sans antialiased bg-gray-50"</span><span class="tag">&gt;</span>
+        <span class="comment">@inertia</span>
+    <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">⚙️</span> Penjelasan Detail Tag & Direktif</h3>
+                <ul class="custom-list">
+                    <li><span class="highlight-text">@viteReactRefresh</span>: Menginstruksikan modul bundler Vite untuk bersiap melakukan <em>Hot Module Replacement (HMR)</em>. Ini sangat berguna pada masa pengembangan agar perubahan code di React langsung ter-update di browser tanpa refresh manual.</li>
+                    <li><span class="highlight-text">@vite(['resources/css/app.css', 'resources/js/app.jsx'])</span>: Compiler aset dari Laravel Vite untuk memuat file CSS utama serta entry-point React aplikasi kita yaitu <code>resources/js/app.jsx</code>.</li>
+                    <li><span class="highlight-text">@inertiaHead</span>: Digunakan untuk memuat metadata header halaman (seperti meta tag deskripsi, title dinamis yang disuntikkan dari komponen-komponen React individual menggunakan komponen <code>&lt;Head title="..." /&gt;</code>).</li>
+                    <li><span class="highlight-text">@inertia</span>: Merupakan server-side helper dari Inertia.js untuk merender container root SPA beserta JSON string payload data yang dikirimkan oleh Controller backend Laravel.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ================= ADMIN TAB ================= -->
+        <div id="admin" class="tab-panel">
+            <div class="content-header">
+                <span class="badge">React Component</span>
+                <h2>Layout Panel Admin (Client-Side)</h2>
+                <p>Layout paling kompleks yang membungkus semua fungsionalitas CRUD, Analisis ROP, dan Hak Akses Pengguna.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">📂</span> Detail Lokasi File</h3>
+                <p><strong>Lokasi Layout:</strong> <code style="color: var(--secondary); background: #05070d; padding: 4px 8px; border-radius: 4px;">resources/js/Layouts/AdminLayout.jsx</code></p>
+                <p style="margin-top: 8px;">Layout ini otomatis digunakan di hampir semua sub-halaman folder <code>resources/js/Pages/Admin/</code> dengan membungkus konten dinamis menggunakan tag: <br>
+                <code>&lt;AdminLayout user={user} title="Judul Halaman"&gt; ...konten halaman... &lt;/AdminLayout&gt;</code></p>
+            </div>
+
+            <div class="grid-2">
+                <div>
+                    <div class="card">
+                        <h3 class="card-title"><span class="icon">📐</span> Struktur Visual Wireframe Admin</h3>
+                        <p style="margin-bottom: 16px; font-size: 0.85rem;">Berikut adalah susunan layout dari komponen <code>AdminLayout.jsx</code>. Klik pada bagian komponen untuk melihat penjelasan kodenya.</p>
+                        
+                        <div class="wireframe-container">
+                            <!-- Top Header -->
+                            <div class="wireframe-element wf-header" onclick="highlightAdminPart('topbar')">
+                                Topbar Header (Sticky)<br>
+                                <span style="font-size:0.65rem; font-weight:normal; color:#60a5fa;">Title Page • Alert Bell • Link Landing Page</span>
+                            </div>
+                            
+                            <div class="wf-main-grid">
+                                <!-- Left Sidebar -->
+                                <div class="wf-sidebar">
+                                    <div class="wireframe-element" style="height: 15%;" onclick="highlightAdminPart('brand')">Logo / Brand</div>
+                                    <div class="wireframe-element" style="height: 20%;" onclick="highlightAdminPart('rop-alert')">ROP Alert (Owner Only)</div>
+                                    <div class="wireframe-element" style="height: 45%;" onclick="highlightAdminPart('navigation')">Role-Based Menu (Nav)</div>
+                                    <div class="wireframe-element" style="height: 20%;" onclick="highlightAdminPart('profile')">Profile info & Logout</div>
+                                </div>
+                                
+                                <!-- Main Content Area -->
+                                <div class="wf-content-area">
+                                    <div class="wireframe-element wf-body" onclick="highlightAdminPart('children')">
+                                        Main Content Area<br>
+                                        <span style="font-size: 0.75rem; font-weight:normal; font-style:italic;">{children} (Render halaman CRUD / ROP / dsb)</span>
+                                    </div>
+                                    <div class="wireframe-element wf-footer" onclick="highlightAdminPart('footer')">
+                                        Footer Copyright &copy;
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card" id="admin-detail-card" style="height: 100%; min-height: 480px; transition: all 0.3s;">
+                        <h3 class="card-title" id="admin-part-title"><span class="icon">ℹ️</span> Klik Bagian Wireframe</h3>
+                        <p id="admin-part-desc">Pilihlah salah satu komponen di skema wireframe di sebelah kiri untuk melihat fungsionalitas dan penjelasan kode pemrogramannya secara detail.</p>
+                        <div id="admin-part-code" style="margin-top: 15px; display: none;">
+                            <div class="code-header"><span id="admin-part-file">AdminLayout.jsx Snippet</span></div>
+                            <div class="code-container"><pre><code id="admin-part-code-block"></code></pre></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">🛡️</span> Sistem Keamanan & Hak Akses (Role-Based)</h3>
+                <p style="margin-bottom: 16px;">
+                    Di dalam skripsi, aspek otorisasi adalah hal krusial untuk dibahas. Layout ini bertindak sebagai penjaga gerbang di sisi tampilan klien. Variabel <code>currentUser?.role</code> diperiksa untuk menampilkan atau menyembunyikan link menu:
+                </p>
+
+                <div class="code-header">
+                    <span>Filter Group Menu Berdasarkan Role</span>
+                    <span>AdminLayout.jsx</span>
+                </div>
+                <div class="code-container">
+                    <pre><code>{/* Memfilter menuGroups berdasarkan role pengguna */}
+{menuGroups
+    .filter(<span class="function">group</span> =&gt; group.roles.includes(currentUser?.role))
+    .map((group, idx) =&gt; (
+        <span class="tag">&lt;div</span> <span class="attr">key</span>={idx} <span class="attr">className</span>=<span class="string">"space-y-1"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;p</span> <span class="attr">className</span>=<span class="string">"text-[10px] font-bold text-slate-500/80 uppercase"</span><span class="tag">&gt;</span>{group.title}<span class="tag">&lt;/p&gt;</span>
+            {group.items
+                .filter(<span class="function">item</span> =&gt; !item.roles || item.roles.includes(currentUser?.role))
+                .map(<span class="function">item</span> =&gt; <span class="tag">&lt;NavLink</span> <span class="attr">key</span>={item.href} <span class="attr">item</span>={item} <span class="tag">/&gt;</span>)
+            }
+        <span class="tag">&lt;/div&gt;</span>
+    ))}</code></pre>
+                </div>
+
+                <div class="danger-box">
+                    <div><strong>⚠️ Catatan Sidang (Sangat Penting!):</strong><br>Jelaskan kepada penguji bahwa keamanan role-based di Front-End (React) ini <strong>hanya untuk menyembunyikan elemen UI</strong>. Keamanan yang sebenarnya (proteksi request data) dikelola di Back-End menggunakan <code>RoleMiddleware.php</code> di Laravel, sehingga admin gudang tidak akan bisa menembak URL milik owner meskipun merubah paksa tampilan React.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= LANDING TAB ================= -->
+        <div id="landing" class="tab-panel">
+            <div class="content-header">
+                <span class="badge">React Page</span>
+                <h2>Layout Landing Page (Public-Facing)</h2>
+                <p>Halaman utama toko Budi Variasi yang diakses oleh pelanggan publik secara langsung.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">📂</span> Detail Lokasi File</h3>
+                <p><strong>Lokasi Layout & Halaman:</strong> <code style="color: var(--secondary); background: #05070d; padding: 4px 8px; border-radius: 4px;">resources/js/Pages/Home.jsx</code></p>
+                <p style="margin-top: 8px;">Halaman ini berdiri sendiri (tidak dibungkus oleh <code>AdminLayout</code>) karena memiliki struktur desain publik yang berbeda (gelap bertema otomotif premium, animasi framer-motion, swiper slider, dan interaksi peta).</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-title"><span class="icon">🧱</span> Struktur Bagian Utama Halaman</h3>
+                    <ul class="custom-list">
+                        <li><span class="highlight-text">Sticky Navbar</span>: Bar navigasi responsif yang menempel di atas halaman. Menyediakan akses cepat ke bagian Layanan, Galeri, Ulasan, Lokasi, dan tombol "Konsultasi Gratis" (WhatsApp).</li>
+                        <li><span class="highlight-text">Hero Section</span>: Area sambutan utama yang elegan dengan background mobil berbayang gelap, menonjolkan keunggulan Budi Variasi sebagai bengkel variasi #1 di Ngawi.</li>
+                        <li><span class="highlight-text">Social Proof Banner</span>: Memaparkan rating Google Maps secara dinamis (didapat dari database / google integration) untuk meningkatkan kredibilitas bisnis.</li>
+                        <li><span class="highlight-text">Interactive Photo Gallery</span>: Carousel foto hasil pekerjaan yang dibuat menggunakan pustaka <strong>Swiper.js</strong>.</li>
+                        <li><span class="highlight-text">Services Grid</span>: Kartu layanan dinamis (diambil dari database) yang diinput oleh admin/owner lewat dashboard admin.</li>
+                        <li><span class="highlight-text">Google Reviews Swiper</span>: Slider ulasan asli pelanggan dari Google Maps.</li>
+                        <li><span class="highlight-text">Location & Map (Iframe)</span>: Menampilkan alamat fisik, jam operasional, dan peta interaktif Google Maps.</li>
+                        <li><span class="highlight-text">Floating WhatsApp Button</span>: Tombol melayang di pojok kanan bawah untuk mempermudah calon pelanggan menghubungi toko secara langsung.</li>
+                    </ul>
+                </div>
+
+                <div class="card" style="display: flex; flex-direction: column; justify-content: center;">
+                    <h3 class="card-title"><span class="icon">🎨</span> Desain Estetika Premium</h3>
+                    <p style="margin-bottom: 12px;">Untuk memukau penguji sidang skripsi, jelaskan teknologi visual yang Anda terapkan pada file ini:</p>
+                    
+                    <ul class="custom-list" style="margin-bottom: 16px;">
+                        <li><span class="highlight-text">Framer Motion</span>: Digunakan untuk animasi micro-interaction saat hover dan transisi yang halus sewaktu elemen masuk ke dalam layar (seperti fade-in-up dan stagger container).</li>
+                        <li><span class="highlight-text">Glassmorphism</span>: Desain semi-transparan dengan efek blur latar belakang (<code>backdrop-blur-xl bg-slate-950/80 border-b border-white/5</code>) pada navigasi bar.</li>
+                        <li><span class="highlight-text">Glow Effect / Radial Gradients</span>: Bola cahaya buatan dengan CSS radial-gradient dan filter-blur sebagai background dekoratif otomotif modern.</li>
+                    </ul>
+
+                    <div class="tip-box">
+                        <div><strong>💡 Tip Pertanyaan:</strong><br><em>"Bagaimana cara web mengambil data ulasan & foto Google?"</em>. Jawab: <em>"Data ditarik dari database lokal (yang sebelumnya telah di-sinkronisasi dengan API Google Places / Maps) dan dilewatkan sebagai array props (<code>services, testimonials, googlePhotos, googleRating</code>) oleh <code>LandingPageController</code>."</em></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= LOGIN TAB ================= -->
+        <div id="login" class="tab-panel">
+            <div class="content-header">
+                <span class="badge">React Auth Page</span>
+                <h2>Layout Login Admin</h2>
+                <p>Halaman khusus dengan desain split-screen premium untuk masuk ke area administratif.</p>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3 class="card-title"><span class="icon">📂</span> Lokasi & Konsep Desain</h3>
+                    <p><strong>Lokasi File:</strong> <code style="color: var(--secondary); background: #05070d; padding: 4px 8px; border-radius: 4px;">resources/js/Pages/Auth/Login.jsx</code></p>
+                    
+                    <p style="margin-top: 16px; margin-bottom: 16px;">
+                        Halaman ini menerapkan desain <strong>Split Screen</strong> (Layar terbagi dua) yang sering ditemukan di aplikasi SaaS modern:
+                    </p>
+
+                    <ul class="custom-list" style="margin-bottom: 16px;">
+                        <li><span class="highlight-text">Panel Kiri (Branding & Edukasi)</span>: Hanya muncul di layar desktop (komputer). Menjelaskan secara ringkas fitur utama aplikasi skripsi Anda (Regresi Linear untuk prediksi, Reorder Point untuk stok kritis, dan real-time sync). Ini membantu meyakinkan penguji bahwa web ini fokus pada solusi bisnis inventory control.</li>
+                        <li><span class="highlight-text">Panel Kanan (Formulir Login)</span>: Menampilkan formulir input email, password, tombol <em>remember me</em>, dan tombol submit.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title"><span class="icon">⚡</span> Keamanan & Form Handling React</h3>
+                    <p style="margin-bottom: 12px;">Halaman ini menggunakan helper hook <code>useForm</code> bawaan dari Inertia.js untuk mempermudah handling state input, validasi error, dan status processing loading tombol.</p>
+
+                    <div class="code-header">
+                        <span>Handling submit login & state</span>
+                        <span>Login.jsx</span>
+                    </div>
+                    <div class="code-container">
+                        <pre><code><span class="comment">// Inisialisasi Form Hook</span>
+const { data, setData, post, processing, errors } = <span class="function">useForm</span>({
+    email: <span class="string">''</span>,
+    password: <span class="string">''</span>,
+    remember: <span class="keyword">false</span>,
+});
+
+<span class="comment">// Fungsi Submit Form</span>
+const <span class="function">submit</span> = (e) =&gt; {
+    e.preventDefault();
+    <span class="function">post</span>(<span class="string">'/admin/login'</span>);
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= SIDANG TAB ================= -->
+        <div id="sidang" class="tab-panel">
+            <div class="content-header">
+                <span class="badge badge-danger">Persiapan Mental & Materi</span>
+                <h2>Bank Tanya-Jawab Sidang Skripsi (Layout & Arsitektur)</h2>
+                <p>Daftar pertanyaan yang kemungkinan besar diajukan oleh dosen penguji terkait aspek pemrograman web ini, lengkap dengan jawaban akademis yang mantap.</p>
+            </div>
+
+            <div class="qa-list">
+                
+                <div class="qa-item">
+                    <div class="qa-question" onclick="toggleQA(this)">
+                        1. Apa kegunaan utama dari file resources/views/app.blade.php? Bukankah aplikasi Anda menggunakan React?
+                    </div>
+                    <div class="qa-answer">
+                        <p>
+                            <strong>Jawaban Akademis:</strong><br>
+                            Meskipun front-end web ini menggunakan React, aplikasi ini tetap berbasis Laravel. File <code>app.blade.php</code> bertindak sebagai <strong>master layout server-side (HTML shell)</strong>. <br><br>
+                            Saat pengguna pertama kali mengakses website, server Laravel akan merender file ini terlebih dahulu. Di dalam file inilah file bundle JavaScript React (<code>app.jsx</code>) dan Tailwind CSS dimuat melalui pustaka compiler <strong>Vite</strong>. Direktif <code>@inertia</code> di dalam body akan bertindak sebagai tempat kontainer root (mount point) di mana seluruh virtual DOM React dirender oleh browser.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question" onclick="toggleQA(this)">
+                        2. Jelaskan bagaimana mekanisme pengiriman data dari database di Laravel ke layout React (misalnya nama user atau jumlah barang kritis)?
+                    </div>
+                    <div class="qa-answer">
+                        <p>
+                            <strong>Jawaban Akademis:</strong><br>
+                            Sistem ini menggunakan <strong>Inertia.js</strong> sebagai jembatan tanpa API. Proses pengiriman data terjadi melalui langkah berikut:<br>
+                            1. Di controller Laravel (misal <code>DashboardController</code>), kita memanggil <code>Inertia::render('Admin/Dashboard', ['alertCount' => $count])</code>.<br>
+                            2. Inertia akan menangkap data <code>alertCount</code> tersebut dan mengubahnya menjadi format JSON.<br>
+                            3. Di sisi front-end, Inertia mengumpankan data tersebut sebagai <strong>React Props</strong> langsung ke komponen halaman (<code>Dashboard.jsx</code>).<br>
+                            4. Komponen halaman kemudian meneruskan data props tersebut ke layout pembungkus (<code>AdminLayout.jsx</code>) sebagai properti layout.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question" onclick="toggleQA(this)">
+                        3. Bagaimana sistem Anda membedakan tampilan menu sidebar antara Owner (Pemilik Toko) dan Admin Gudang? Di mana logikanya berada?
+                    </div>
+                    <div class="qa-answer">
+                        <p>
+                            <strong>Jawaban Akademis:</strong><br>
+                            Pembedaan tampilan menu dilakukan secara dinamis di file <code>AdminLayout.jsx</code> dengan memanfaatkan <strong>Role-Based Navigation Array</strong>. <br><br>
+                            Kami mendeklarasikan struktur menu di variabel <code>menuGroups</code> yang berisi objek menu beserta properti <code>roles</code> yang diizinkan (misalnya <code>roles: ['owner']</code> untuk menu laporan perhitungan ROP). <br><br>
+                            Kemudian di dalam komponen React, sistem akan memfilter menu tersebut menggunakan fungsi <code>.filter()</code> javascript terhadap data user yang sedang login (diperoleh dari properti <code>auth.user.role</code>). Jika role user tidak ada di daftar hak akses menu, maka item menu tersebut tidak akan dirender ke DOM sidebar.
+                        </p>
+                        <div class="tip-box">
+                            <strong>Tip Tambahan:</strong> Tambahkan penjelasan bahwa untuk mencegah bypass URL manual, rute di sisi server (back-end) juga diproteksi ketat menggunakan route middleware Laravel (misal <code>Route::middleware(['role:owner'])</code> di <code>web.php</code>).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question" onclick="toggleQA(this)">
+                        4. Apa arti dari props {children} pada AdminLayout.jsx dan bagaimana cara kerjanya?
+                    </div>
+                    <div class="qa-answer">
+                        <p>
+                            <strong>Jawaban Akademis:</strong><br>
+                            Dalam React, <code>children</code> adalah properti bawaan (build-in props) yang mewakili elemen atau komponen anak yang dibungkus oleh komponen induk. <br><br>
+                            Pada <code>AdminLayout.jsx</code>, <code>{children}</code> ditempatkan di dalam tag <code>&lt;main class="flex-1 p-6"&gt;</code>. Ini berarti, halaman apapun yang dibungkus oleh <code>&lt;AdminLayout&gt;</code> (seperti <code>Dashboard.jsx</code>, <code>Products.jsx</code>, dsb) akan dirender secara dinamis di area konten utama tersebut, sementara elemen luar seperti sidebar, header topbar, dan footer tetap statis. Ini menghemat penggunaan memory browser dan mempercepat waktu rendering halaman.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question" onclick="toggleQA(this)">
+                        5. Mengapa sistem notifikasi barang kritis (alertCount) hanya ditampilkan kepada Owner, bukan Admin Gudang?
+                    </div>
+                    <div class="qa-answer">
+                        <p>
+                            <strong>Jawaban Akademis:</strong><br>
+                            Berdasarkan analisis kebutuhan sistem inventory control di Budi Variasi Mobil, wewenang pengambilan keputusan pemesanan barang kembali (Reorder) dan analisis finansial safety stock sepenuhnya berada di tangan <strong>Owner</strong>. <br><br>
+                            Oleh karena itu, notifikasi barang kritis (stok di bawah reorder point) hanya diarahkan ke Owner di dashboard dan sidebar agar Owner dapat segera menyetujui Purchase Order (PO) pembelian barang ke supplier. Sedangkan Admin Gudang berfokus pada operasional pencatatan barang masuk dan keluar fisik di gudang.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="qa-item">
+                    <div class="qa-question" onclick="toggleQA(this)">
+                        6. Mengapa halaman login (Login.jsx) dan landing page (Home.jsx) tidak dibungkus oleh AdminLayout.jsx?
+                    </div>
+                    <div class="qa-answer">
+                        <p>
+                            <strong>Jawaban Akademis:</strong><br>
+                            Karena kedua halaman tersebut memiliki tujuan fungsional dan desain estetika (layout grid) yang sepenuhnya berbeda:<br><br>
+                            - <code>Home.jsx</code> ditujukan untuk pelanggan eksternal (publik) yang memerlukan antarmuka visual bertema gelap-modern otomotif, integrasi ulasan Google Maps, galeri swiper, tanpa sidebar administratif.<br>
+                            - <code>Login.jsx</code> adalah gerbang keamanan satu halaman (standalone page) yang hanya berisi form otorisasi dan tidak memerlukan sidebar navigasi internal admin.<br><br>
+                            Oleh karena itu, masing-masing halaman merender layout uniknya sendiri-sendiri, sementara <code>AdminLayout.jsx</code> khusus didesain untuk halaman-halaman yang membutuhkan akses autentikasi internal.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= MENU MAP TAB ================= -->
+        <div id="menu-map" class="tab-panel">
+            <div class="content-header">
+                <span class="badge">Peta Navigasi & File</span>
+                <h2>Peta Lokasi & Source Code Menu Sidebar</h2>
+                <p>Panduan pencarian file front-end (UI React) dan back-end (Controller PHP) untuk setiap menu di sidebar Admin.</p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">🗺️</span> Pemetaan File Halaman (Sidebar Menu Map)</h3>
+                <p style="margin-bottom: 20px;">Gunakan tabel ini untuk mencari kode sumber dari halaman-halaman yang Anda klik di sidebar admin:</p>
+
+                <table class="layout-table">
+                    <thead>
+                        <tr>
+                            <th>Menu Sidebar</th>
+                            <th>Akses URL</th>
+                            <th>Front-End (React UI)</th>
+                            <th>Back-End (Controller PHP)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="highlight-text">1. Dashboard</td>
+                            <td><code>/admin/dashboard</code></td>
+                            <td><code>resources/js/Pages/Admin/Dashboard.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/DashboardController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">2. Manajemen Produk</td>
+                            <td><code>/admin/products</code></td>
+                            <td>
+                                <code>resources/js/Pages/Admin/Products/Index.jsx</code> (List)<br>
+                                <code>resources/js/Pages/Admin/Products/Form.jsx</code> (Tambah/Edit)
+                            </td>
+                            <td><code>app/Http/Controllers/Admin/ProductController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">3. Data Supplier</td>
+                            <td><code>/admin/suppliers</code></td>
+                            <td><code>resources/js/Pages/Admin/Suppliers/Index.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/SupplierController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">4. Catat Penjualan</td>
+                            <td><code>/admin/sales</code></td>
+                            <td>
+                                <code>resources/js/Pages/Admin/Sales/Index.jsx</code> (Riwayat)<br>
+                                <code>resources/js/Pages/Admin/Sales/Create.jsx</code> (Form Catat)
+                            </td>
+                            <td><code>app/Http/Controllers/Admin/SaleController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">5. Barang Masuk (PO)</td>
+                            <td><code>/admin/purchases</code></td>
+                            <td>
+                                <code>resources/js/Pages/Admin/Purchases/Index.jsx</code> (Riwayat)<br>
+                                <code>resources/js/Pages/Admin/Purchases/Create.jsx</code> (Form Catat)
+                            </td>
+                            <td><code>app/Http/Controllers/Admin/PurchaseController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">6. Laporan Perhitungan ROP</td>
+                            <td><code>/admin/inventory/report</code></td>
+                            <td>
+                                <code>resources/js/Pages/Admin/Inventory/Report.jsx</code> (Laporan)<br>
+                                <code>resources/js/Pages/Admin/Inventory/Detail.jsx</code> (Detail Kalkulasi)
+                            </td>
+                            <td><code>app/Http/Controllers/Admin/InventoryReportController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">7. Konfigurasi Safety Stock</td>
+                            <td><code>/admin/inventory/settings</code></td>
+                            <td><code>resources/js/Pages/Admin/Inventory/Settings.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/RopSettingsController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">8. Kelola Layanan Jasa</td>
+                            <td><code>/admin/services</code></td>
+                            <td><code>resources/js/Pages/Admin/Services/Index.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/ServiceController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">9. Testimoni Pelanggan</td>
+                            <td><code>/admin/testimonials</code></td>
+                            <td><code>resources/js/Pages/Admin/Testimonials/Index.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/TestimonialController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">10. Kelola Hak Akses (User)</td>
+                            <td><code>/admin/users</code></td>
+                            <td><code>resources/js/Pages/Admin/Users.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/UserController.php</code></td>
+                        </tr>
+                        <tr>
+                            <td class="highlight-text">11. Profil Saya</td>
+                            <td><code>/admin/profile</code></td>
+                            <td><code>resources/js/Pages/Admin/Profile.jsx</code></td>
+                            <td><code>app/Http/Controllers/Admin/ProfileController.php</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title"><span class="icon">🧠</span> Pusat Logika & Algoritma (Brain of System)</h3>
+                <p style="margin-bottom: 16px;">
+                    Bagian ini tidak memiliki file tampilan (front-end) karena bertindak sebagai penyedia layanan algoritma terpusat. Ini adalah bagian yang paling dicari oleh dosen penguji skripsi untuk dipertanyakan logika pemrogramannya:
+                </p>
+
+                <ul class="custom-list" style="margin-bottom: 20px;">
+                    <li>
+                        <span class="highlight-text">Service Algoritma (Regresi Linear & ROP)</span>: <br>
+                        <code>app/Services/InventoryAlgorithmService.php</code><br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Di sinilah rumus matematika peramalan regresi linear dan kalkulasi Reorder Point (ROP) dieksekusi secara otomatis oleh sistem.</span>
+                    </li>
+                    <li>
+                        <span class="highlight-text">Cetak PDF Purchase Order (PO)</span>: <br>
+                        <code>app/Http/Controllers/Admin/PurchaseOrderController.php</code> dan file layout pdf <code>resources/views/pdf/purchase_order.blade.php</code>.<br>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Digunakan untuk menjabarkan form surat PO ke supplier yang otomatis terisi data ROP barang tersebut.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JS Logic for Tabs and Wireframe Interaction -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all tab panels
+            const panels = document.querySelectorAll('.tab-panel');
+            panels.forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // Deactivate all nav items
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected panel
+            document.getElementById(tabId).classList.add('active');
+
+            // Find clicked nav item and activate it
+            // We search based on the onclick attribute contents
+            navItems.forEach(item => {
+                if (item.getAttribute('onclick').includes(tabId)) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Scroll content to top
+            window.scrollTo(0, 0);
+        }
+
+        // Accordion QA
+        function toggleQA(element) {
+            const item = element.parentElement;
+            item.classList.toggle('open');
+        }
+
+        // Highlight specific part in AdminLayout Wireframe
+        function highlightAdminPart(part) {
+            const detailCard = document.getElementById('admin-detail-card');
+            const titleEl = document.getElementById('admin-part-title');
+            const descEl = document.getElementById('admin-part-desc');
+            const codeContainer = document.getElementById('admin-part-code');
+            const codeBlock = document.getElementById('admin-part-code-block');
+            
+            codeContainer.style.display = 'block';
+            
+            // Add a small scale/pulse effect to detail card
+            detailCard.style.borderColor = 'var(--primary)';
+            setTimeout(() => {
+                detailCard.style.borderColor = 'var(--border-color)';
+            }, 500);
+
+            if (part === 'topbar') {
+                titleEl.innerHTML = '<span class="icon">🔝</span> Header / Topbar';
+                descEl.innerHTML = 'Topbar menempel di bagian atas layar (sticky). Berisi tombol hamburger (menu) untuk tampilan handphone (mobile), menampilkan judul halaman aktif secara dinamis, tombol bell notifikasi stok kritis (hanya terlihat oleh Owner), dan tombol cepat untuk preview Landing Page.';
+                codeBlock.innerHTML = `<span class="tag">&lt;header</span> <span class="attr">className</span>=<span class="string">"sticky top-0 z-20 h-14 bg-[#0b1329]/80 backdrop-blur-md..."</span><span class="tag">&gt;</span>
+    <span class="comment">{/* Tombol Menu Mobile */}</span>
+    <span class="tag">&lt;button</span> <span class="attr">onClick</span>={<span class="function">() =&gt; setSidebarOpen(true)</span>} ...<span class="tag">&gt;</span><span class="tag">&lt;Menu /&gt;</span><span class="tag">&lt;/button&gt;</span>
+    
+    <span class="comment">{/* Title Dinamis */}</span>
+    {title && <span class="tag">&lt;h1</span> ...<span class="tag">&gt;</span>{title}<span class="tag">&lt;/h1&gt;</span>}
+
+    <span class="comment">{/* Bell ROP Alert */}</span>
+    {alertCount &gt; 0 && currentUser?.role === 'owner' && (
+        <span class="tag">&lt;Link</span> <span class="attr">href</span>=<span class="string">"/admin/inventory/report"</span>...<span class="tag">&gt;</span><span class="tag">&lt;Bell /&gt;</span><span class="tag">&lt;/Link&gt;</span>
+    )}
+<span class="tag">&lt;/header&gt;</span>`;
+            } else if (part === 'brand') {
+                titleEl.innerHTML = '<span class="icon">🏷️</span> Brand / Logo Header';
+                descEl.innerHTML = 'Terletak di ujung kiri atas sidebar. Menampilkan nama usaha "BUDI VARIASI" dan sub-label "SYSTEM ROP" sebagai identitas aplikasi. Dilengkapi dengan icon tren naik (TrendingUp) yang mewakili algoritma peramalan stok.';
+                codeBlock.innerHTML = `<span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="string">"px-5 py-4 border-b border-slate-800/60 flex items-center..."</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="string">"w-8 h-8 bg-gradient-to-tr from-blue-500 to-indigo-600..."</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;TrendingUp</span> <span class="attr">className</span>=<span class="string">"w-4 h-4 text-white"</span> <span class="tag">/&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;p</span> <span class="attr">className</span>=<span class="string">"text-slate-100 font-bold"</span><span class="tag">&gt;</span>BUDI VARIASI<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p</span> <span class="attr">className</span>=<span class="string">"text-blue-400"</span><span class="tag">&gt;</span>SYSTEM ROP<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`;
+            } else if (part === 'rop-alert') {
+                titleEl.innerHTML = '<span class="icon">⚠️</span> Sidebar ROP Warning Box';
+                descEl.innerHTML = 'Ini adalah fitur visual terpenting skripsi Anda. Merupakan kotak peringatan stok kritis di bawah logo sidebar. Kotak ini <strong>hanya muncul jika ada barang kritis (alertCount > 0) dan yang sedang login adalah Owner</strong>. Mengarahkan owner langsung ke laporan ROP saat diklik.';
+                codeBlock.innerHTML = `<span class="comment">// Warning Alert stok kritis di Sidebar</span>
+{alertCount &gt; 0 && currentUser?.role === <span class="string">'owner'</span> && (
+    <span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="string">"mx-4 mt-3"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Link</span> <span class="attr">href</span>=<span class="string">"/admin/inventory/report"</span> <span class="attr">className</span>=<span class="string">"bg-rose-500/5 border border-rose-500/10..."</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;AlertTriangle</span> <span class="attr">className</span>=<span class="string">"text-rose-400 animate-pulse"</span> <span class="tag">/&gt;</span>
+            <span class="tag">&lt;div&gt;</span>
+                <span class="tag">&lt;p</span> <span class="attr">className</span>=<span class="string">"text-rose-300 font-bold"</span><span class="tag">&gt;</span>{alertCount} Barang Kritis<span class="tag">&lt;/p&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/Link&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+)}`;
+            } else if (part === 'navigation') {
+                titleEl.innerHTML = '<span class="icon">📂</span> Role-Based Nav Menu';
+                descEl.innerHTML = 'Daftar link navigasi halaman admin. Link dikelompokkan menjadi 4 kategori: Operasional Toko, Analisis Stok (ROP), Manajemen Website, dan Sistem & Akun. Menu ini dinonaktifkan/disembunyikan secara berkala berdasarkan role pengguna untuk menjaga relevansi tugas user.';
+                codeBlock.innerHTML = `<span class="tag">&lt;nav</span> <span class="attr">className</span>=<span class="string">"flex-1 overflow-y-auto px-3 py-4 space-y-4"</span><span class="tag">&gt;</span>
+    {menuGroups
+        .filter(<span class="function">group</span> =&gt; group.roles.includes(currentUser?.role))
+        .map((group, idx) =&gt; (
+            <span class="tag">&lt;div</span> <span class="attr">key</span>={idx} ...<span class="tag">&gt;</span>
+                <span class="tag">&lt;p</span> ...<span class="tag">&gt;</span>{group.title}<span class="tag">&lt;/p&gt;</span>
+                {group.items
+                    .filter(<span class="function">item</span> =&gt; !item.roles || item.roles.includes(currentUser?.role))
+                    .map(<span class="function">item</span> =&gt; <span class="tag">&lt;NavLink</span> <span class="attr">key</span>={item.href} <span class="attr">item</span>={item} <span class="tag">/&gt;</span>)
+                }
+            <span class="tag">&lt;/div&gt;</span>
+        ))}
+<span class="tag">&lt;/nav&gt;</span>`;
+            } else if (part === 'profile') {
+                titleEl.innerHTML = '<span class="icon">👤</span> Profile Card & Logout';
+                descEl.innerHTML = 'Terletak di dasar sidebar. Menampilkan inisial huruf nama pengguna, nama lengkap user, badge level hak akses berwarna biru (Owner / Admin Gudang), serta tombol logout untuk memicu request POST ke route <code>/admin/logout</code>.';
+                codeBlock.innerHTML = `<span class="comment">{/* Info Akun Aktif */}</span>
+<span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="string">"flex items-center gap-2.5 px-3 py-2 bg-slate-900/50..."</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="string">"w-7 h-7 rounded bg-gradient-to-tr from-blue-500 to-indigo-600..."</span><span class="tag">&gt;</span>
+        {currentUser?.name?.charAt(0)?.toUpperCase()}
+    <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;div&gt;</span>
+        <span class="tag">&lt;p</span> <span class="attr">className</span>=<span class="string">"text-slate-200 text-xs font-bold"</span><span class="tag">&gt;</span>{currentUser?.name}<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;span</span> <span class="attr">className</span>=<span class="string">"text-[9px] text-blue-400 bg-blue-500/10..."</span><span class="tag">&gt;</span>{currentUser?.role}<span class="tag">&lt;/span&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="comment">{/* Tombol Logout */}</span>
+<span class="tag">&lt;button</span> <span class="attr">onClick</span>={handleLogout} <span class="attr">className</span>=<span class="string">"w-full text-slate-500 hover:text-rose-400..."</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;LogOut</span> <span class="attr">className</span>=<span class="string">"w-3.5 h-3.5"</span> <span class="tag">/&gt;</span> Keluar Sistem
+<span class="tag">&lt;/button&gt;</span>`;
+            } else if (part === 'children') {
+                titleEl.innerHTML = '<span class="icon">🖼️</span> Konten Dinamis ({children})';
+                descEl.innerHTML = 'Properti <code>children</code> adalah slot penampung dinamis React. Saat router Inertia memicu perpindahan halaman (misal ke halaman kelola produk), React akan memuat halaman tersebut dan menaruhnya tepat di slot ini. Sehingga sidebar dan header tidak ter-render ulang, menghemat resource browser.';
+                codeBlock.innerHTML = `<span class="comment">// Di dalam return komponen AdminLayout:</span>
+<span class="tag">&lt;div</span> <span class="attr">className</span>=<span class="string">"flex-1 lg:ml-56 flex flex-col min-h-screen"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;header</span> ...<span class="tag">&gt;</span>...<span class="tag">&lt;/header&gt;</span>
+    
+    <span class="comment">{/* Main Content rendering children component */}</span>
+    <span class="tag">&lt;main</span> <span class="attr">className</span>=<span class="string">"flex-1 p-6"</span><span class="tag">&gt;</span>
+        {children}
+    <span class="tag">&lt;/main&gt;</span>
+
+    <span class="tag">&lt;footer</span> ...<span class="tag">&gt;</span>...<span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/div&gt;</span>`;
+            } else if (part === 'footer') {
+                titleEl.innerHTML = '<span class="icon">📅</span> Footer Dashboard';
+                descEl.innerHTML = 'Menampilkan teks hak cipta "© 2026 Budi Variasi Mobil — Ngawi. Aplikasi Peramalan & Inventory Control." di paling bawah halaman konten utama.';
+                codeBlock.innerHTML = `<span class="tag">&lt;footer</span> <span class="attr">className</span>=<span class="string">"text-center text-slate-600 text-[10px] py-4..."</span><span class="tag">&gt;</span>
+    © {new Date().getFullYear()} Budi Variasi Mobil — Ngawi. Aplikasi Peramalan & Inventory Control.
+<span class="tag">&lt;/footer&gt;</span>`;
+            }
+        }
+    </script>
+</body>
+</html>

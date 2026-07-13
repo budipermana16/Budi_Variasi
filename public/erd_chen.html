@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skema ERD Notasi Chen - Budi Variasi Mobil</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Times+New+Roman&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #080d1a;
+            --bg-card: #0b1329;
+            --bg-viewport: #0f172a;
+            --border-color: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --accent-color: #3b82f6;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        body.theme-light {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-viewport: #f1f5f9;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-color: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        header {
+            max-width: 1280px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .header-title span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background-color: var(--bg-viewport);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            background-color: var(--accent-color);
+        }
+
+        .academic-info {
+            max-width: 1280px;
+            margin: 0 auto 24px auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .academic-info strong {
+            color: var(--text-main);
+        }
+
+        .toolbar {
+            max-width: 1280px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        select {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        select:focus {
+            border-color: var(--accent-color);
+        }
+
+        .canvas-card {
+            max-width: 1280px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .card-title p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .canvas-wrapper {
+            background-color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: auto;
+            position: relative;
+            min-height: 700px;
+            max-height: 900px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        #erd-svg {
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: block;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        /* SVG Inner Styling classes */
+        #erd-svg.font-sans text {
+            font-family: 'Outfit', sans-serif !important;
+        }
+        #erd-svg.font-serif text {
+            font-family: 'Times New Roman', Times, serif !important;
+        }
+
+        /* Grid Pattern */
+        .grid-dot {
+            fill: #e2e8f0;
+        }
+        #erd-svg.theme-dark-canvas .grid-dot {
+            fill: #334155;
+        }
+
+        /* Academic Style (Times New Roman B&W) */
+        #erd-svg.style-academic .entity-rect {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+        #erd-svg.style-academic .relationship-diamond {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+        #erd-svg.style-academic .attribute-ellipse {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 1px;
+        }
+        #erd-svg.style-academic .connector-line {
+            stroke: #000000;
+            stroke-width: 1.2px;
+        }
+        #erd-svg.style-academic text {
+            fill: #000000;
+        }
+        #erd-svg.style-academic .key-underlined {
+            text-decoration: underline;
+        }
+
+        /* Modern B&W Style */
+        #erd-svg.style-modern-bw .entity-rect {
+            fill: #ffffff;
+            stroke: #0f172a;
+            stroke-width: 2px;
+            filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.05));
+        }
+        #erd-svg.style-modern-bw .relationship-diamond {
+            fill: #f8fafc;
+            stroke: #0f172a;
+            stroke-width: 2px;
+        }
+        #erd-svg.style-modern-bw .attribute-ellipse {
+            fill: #ffffff;
+            stroke: #475569;
+            stroke-width: 1.2px;
+        }
+        #erd-svg.style-modern-bw .connector-line {
+            stroke: #475569;
+            stroke-dasharray: none;
+            stroke-width: 1.5px;
+        }
+        #erd-svg.style-modern-bw text {
+            fill: #0f172a;
+        }
+        #erd-svg.style-modern-bw .key-underlined {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        /* Sleek Dark Accent Style */
+        #erd-svg.style-dark .entity-rect {
+            fill: #0b1329;
+            stroke: #3b82f6;
+            stroke-width: 2px;
+        }
+        #erd-svg.style-dark .relationship-diamond {
+            fill: #0b1329;
+            stroke: #10b981;
+            stroke-width: 2px;
+        }
+        #erd-svg.style-dark .attribute-ellipse {
+            fill: #0b1329;
+            stroke: #8b5cf6;
+            stroke-width: 1.2px;
+        }
+        #erd-svg.style-dark .connector-line {
+            stroke: #475569;
+            stroke-width: 1.5px;
+        }
+        #erd-svg.style-dark text {
+            fill: #f1f5f9;
+        }
+        #erd-svg.style-dark .key-underlined {
+            fill: #a78bfa !important;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .node-group {
+            cursor: move;
+        }
+
+        .detail-panel {
+            max-width: 1280px;
+            margin: 16px auto 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .detail-panel h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-content {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .btn-reset {
+            background-color: transparent;
+            border: 1px dashed var(--text-muted);
+            color: var(--text-muted);
+        }
+        .btn-reset:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Diagram ERD Notasi Chen (Klasik)</h1>
+            <span>Representasi Entitas, Relasi, Atribut Berdasarkan Gambar Komponen ERD</span>
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="toggleTheme()" id="themeBtn">🌓 Mode Terang (Cetak)</button>
+            <a href="/erd.html" class="btn">📋 Lihat ERD Crow's Foot</a>
+            <button class="btn btn-primary" onclick="downloadHtmlFile()">📥 Unduh File HTML</button>
+            <a href="/admin/dashboard" class="btn btn-primary">Kembali ke Admin ↗</a>
+        </div>
+    </header>
+
+    <div class="academic-info">
+        💡 <strong>Panduan Akademik Skripsi:</strong> Diagram ERD di bawah menggunakan <strong>Notasi Chen (Klasik)</strong> sesuai simbol standar yang Anda unggah: <strong>Persegi Panjang</strong> (Entitas), <strong>Belah Ketupat/Diamond</strong> (Relasi), <strong>Oval/Elips</strong> (Atribut, dengan Primary Key bergaris bawah), dan <strong>Garis Penghubung</strong>. Anda dapat menggeser elemen di kanvas untuk memosisikannya secara bebas.
+    </div>
+
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <label for="styleSelect" style="font-size: 0.85rem; font-weight: bold;">Gaya ERD:</label>
+            <select id="styleSelect" onchange="updateErdStyle()">
+                <option value="academic">Academic B&amp;W (Times New Roman, Cetak)</option>
+                <option value="modern-bw" selected>Modern B&amp;W (Sans-Serif, Bersih)</option>
+                <option value="dark">Sleek Dark Mode (Neon Accent)</option>
+            </select>
+
+            <label for="fontSelect" style="font-size: 0.85rem; font-weight: bold; margin-left: 12px;">Font:</label>
+            <select id="fontSelect" onchange="updateErdFont()">
+                <option value="serif">Times New Roman (Serif)</option>
+                <option value="sans" selected>Outfit / Arial (Sans-Serif)</option>
+            </select>
+
+            <label for="attrToggle" style="font-size: 0.85rem; font-weight: bold; margin-left: 12px;">Tampilkan Atribut:</label>
+            <select id="attrToggle" onchange="toggleAttributes()">
+                <option value="show" selected>Tampilkan Semua</option>
+                <option value="key">Tampilkan Hanya Primary Key (PK)</option>
+                <option value="hide">Sembunyikan Atribut (Hanya Entitas &amp; Relasi)</option>
+            </select>
+        </div>
+
+        <div class="toolbar-group">
+            <button class="btn btn-reset" onclick="resetLayout()">🔄 Atur Ulang Posisi</button>
+            <button class="btn btn-primary" onclick="downloadAsPng()">📥 Unduh Gambar PNG</button>
+        </div>
+    </div>
+
+    <div class="canvas-card">
+        <div class="card-header">
+            <div class="card-title">
+                <h2>Kanvas ERD Chen - Budi Variasi</h2>
+                <p>Gunakan mouse Anda untuk menggeser kotak (Entitas), belah ketupat (Relasi), atau elips (Atribut) ke posisi yang diinginkan.</p>
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 16px;">
+                <span>Double-click / Drag untuk reposisi</span>
+            </div>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <svg id="erd-svg" width="1250" height="950" viewBox="0 0 1250 950" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid background pattern -->
+                <defs>
+                    <pattern id="gridPattern" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <circle cx="2.5" cy="2.5" r="1.5" class="grid-dot" />
+                    </pattern>
+                </defs>
+
+                <!-- Background rect with grid -->
+                <rect id="grid-bg" width="100%" height="100%" fill="url(#gridPattern)" />
+
+                <!-- Group for connection lines -->
+                <g id="lines-group"></g>
+
+                <!-- Group for cardinality labels -->
+                <g id="cardinality-group"></g>
+
+                <!-- Group for nodes -->
+                <g id="nodes-group"></g>
+            </svg>
+        </div>
+        
+        <div class="detail-panel" id="detailPanel">
+            <h3>📌 Deskripsi Komponen ERD Chen</h3>
+            <div class="detail-content" id="detailContent">
+                Pilih salah satu komponen diagram di atas untuk melihat deskripsi detail dari entitas atau relasi yang bersangkutan.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Nodes data (Entities, Relationships, Attributes)
+        const initialNodes = [
+            // Entities (4x2 Grid Layout)
+            { id: "e_users", type: "entity", label: "PENGGUNA", x: 150, y: 350 },
+            { id: "e_services", type: "entity", label: "SERVICES (LAYANAN)", x: 450, y: 350 },
+            { id: "e_testimonials", type: "entity", label: "TESTIMONIALS", x: 750, y: 350 },
+            { id: "e_controls", type: "entity", label: "KONTROL INVENTORI", x: 1050, y: 350 },
+
+            { id: "e_suppliers", type: "entity", label: "SUPPLIER", x: 150, y: 650 },
+            { id: "e_purchases", type: "entity", label: "PEMBELIAN", x: 450, y: 650 },
+            { id: "e_products", type: "entity", label: "PRODUK", x: 750, y: 650 },
+            { id: "e_sales", type: "entity", label: "PENJUALAN", x: 1050, y: 650 },
+            
+            // Relationships (Centered on grid lines)
+            { id: "r_user_serv", type: "relationship", label: "mengatur", x: 300, y: 350 },
+            { id: "r_user_test", type: "relationship", label: "memoderasi", x: 450, y: 250 },
+            { id: "r_user_prod", type: "relationship", label: "mengelola", x: 450, y: 500 },
+            { id: "r_user_supp", type: "relationship", label: "mengelola", x: 150, y: 500 },
+            { id: "r_user_ctrl", type: "relationship", label: "mengatur", x: 600, y: 220 },
+            { id: "r_user_sale", type: "relationship", label: "mencatat", x: 600, y: 500 },
+            { id: "r_supp_prod", type: "relationship", label: "menyuplai", x: 450, y: 750 },
+            { id: "r_supp_purch", type: "relationship", label: "mengirim", x: 300, y: 650 },
+            { id: "r_prod_purch", type: "relationship", label: "masuk", x: 600, y: 650 },
+            { id: "r_prod_sales", type: "relationship", label: "mengalami", x: 900, y: 650 },
+            { id: "r_prod_control", type: "relationship", label: "dikontrol", x: 900, y: 500 },
+
+            // Attributes for e_users (Top row, fanned upwards)
+            { id: "a_u_id", type: "attribute", label: "id", isKey: true, parent: "e_users", x: 50, y: 220 },
+            { id: "a_u_name", type: "attribute", label: "name", parent: "e_users", x: 110, y: 190 },
+            { id: "a_u_email", type: "attribute", label: "email", parent: "e_users", x: 190, y: 190 },
+            { id: "a_u_role", type: "attribute", label: "role", parent: "e_users", x: 250, y: 220 },
+
+            // Attributes for e_services (Top row, fanned upwards)
+            { id: "a_se_id", type: "attribute", label: "id", isKey: true, parent: "e_services", x: 350, y: 220 },
+            { id: "a_se_title", type: "attribute", label: "title", parent: "e_services", x: 410, y: 190 },
+            { id: "a_se_desc", type: "attribute", label: "description", parent: "e_services", x: 450, y: 170 },
+            { id: "a_se_image", type: "attribute", label: "image", parent: "e_services", x: 490, y: 190 },
+            { id: "a_se_active", type: "attribute", label: "is_active", parent: "e_services", x: 550, y: 220 },
+
+            // Attributes for e_testimonials (Top row, fanned upwards)
+            { id: "a_t_id", type: "attribute", label: "id", isKey: true, parent: "e_testimonials", x: 650, y: 220 },
+            { id: "a_t_name", type: "attribute", label: "name", parent: "e_testimonials", x: 710, y: 190 },
+            { id: "a_t_text", type: "attribute", label: "review_text", parent: "e_testimonials", x: 750, y: 170 },
+            { id: "a_t_rating", type: "attribute", label: "rating", parent: "e_testimonials", x: 790, y: 190 },
+            { id: "a_t_disp", type: "attribute", label: "is_displayed", parent: "e_testimonials", x: 850, y: 220 },
+
+            // Attributes for e_controls (Top row, fanned upwards)
+            { id: "a_c_id", type: "attribute", label: "id_control", isKey: true, parent: "e_controls", x: 950, y: 220 },
+            { id: "a_c_ss", type: "attribute", label: "safety_stock", parent: "e_controls", x: 1010, y: 190 },
+            { id: "a_c_rop", type: "attribute", label: "reorder_point", parent: "e_controls", x: 1090, y: 190 },
+            { id: "a_c_status", type: "attribute", label: "status_stok", parent: "e_controls", x: 1150, y: 220 },
+
+            // Attributes for e_suppliers (Bottom row, fanned downwards)
+            { id: "a_s_id", type: "attribute", label: "id_supplier", isKey: true, parent: "e_suppliers", x: 50, y: 780 },
+            { id: "a_s_name", type: "attribute", label: "nama_supplier", parent: "e_suppliers", x: 110, y: 810 },
+            { id: "a_s_addr", type: "attribute", label: "alamat", parent: "e_suppliers", x: 190, y: 810 },
+            { id: "a_s_lead", type: "attribute", label: "lead_time_rata_rata", parent: "e_suppliers", x: 250, y: 780 },
+
+            // Attributes for e_purchases (Bottom row, fanned downwards)
+            { id: "a_pu_id", type: "attribute", label: "id_pembelian", isKey: true, parent: "e_purchases", x: 370, y: 780 },
+            { id: "a_pu_date", type: "attribute", label: "tanggal_masuk", parent: "e_purchases", x: 450, y: 810 },
+            { id: "a_pu_qty", type: "attribute", label: "jumlah_masuk", parent: "e_purchases", x: 530, y: 780 },
+
+            // Attributes for e_products (Bottom row, fanned downwards)
+            { id: "a_p_id", type: "attribute", label: "id_barang", isKey: true, parent: "e_products", x: 630, y: 780 },
+            { id: "a_p_name", type: "attribute", label: "nama_barang", parent: "e_products", x: 680, y: 810 },
+            { id: "a_p_cat", type: "attribute", label: "kategori", parent: "e_products", x: 730, y: 830 },
+            { id: "a_p_buy", type: "attribute", label: "harga_beli", parent: "e_products", x: 770, y: 830 },
+            { id: "a_p_sell", type: "attribute", label: "harga_jual", parent: "e_products", x: 820, y: 810 },
+            { id: "a_p_stock", type: "attribute", label: "stok_saat_ini", parent: "e_products", x: 870, y: 780 },
+
+            // Attributes for e_sales (Bottom row, fanned downwards)
+            { id: "a_sa_id", type: "attribute", label: "id_penjualan", isKey: true, parent: "e_sales", x: 950, y: 780 },
+            { id: "a_sa_date", type: "attribute", label: "tanggal_keluar", parent: "e_sales", x: 1010, y: 810 },
+            { id: "a_sa_qty", type: "attribute", label: "jumlah_terjual", parent: "e_sales", x: 1090, y: 810 },
+            { id: "a_sa_tot", type: "attribute", label: "total_harga", parent: "e_sales", x: 1150, y: 780 }
+        ];
+
+        // Connection links data
+        const initialLinks = [
+            // Supplier - menyuplai - Produk (1 - N)
+            { from: "e_suppliers", to: "r_supp_prod", card: "1" },
+            { from: "r_supp_prod", to: "e_products", card: "N" },
+
+            // Produk - mengalami - Penjualan (1 - N)
+            { from: "e_products", to: "r_prod_sales", card: "1" },
+            { from: "r_prod_sales", to: "e_sales", card: "N" },
+
+            // Produk - masuk - Pembelian (1 - N)
+            { from: "e_products", to: "r_prod_purch", card: "1" },
+            { from: "r_prod_purch", to: "e_purchases", card: "N" },
+
+            // Supplier - mengirim - Pembelian (1 - N)
+            { from: "e_suppliers", to: "r_supp_purch", card: "1" },
+            { from: "r_supp_purch", to: "e_purchases", card: "N" },
+
+            // Produk - dikontrol - Kontrol Inventori (1 - 1)
+            { from: "e_products", to: "r_prod_control", card: "1" },
+            { from: "r_prod_control", to: "e_controls", card: "1" },
+
+            // User - mengelola - Produk (1 - N)
+            { from: "e_users", to: "r_user_prod", card: "1" },
+            { from: "r_user_prod", to: "e_products", card: "N" },
+
+            // User - mengelola - Supplier (1 - N)
+            { from: "e_users", to: "r_user_supp", card: "1" },
+            { from: "r_user_supp", to: "e_suppliers", card: "N" },
+
+            // User - mencatat - Penjualan (1 - N)
+            { from: "e_users", to: "r_user_sale", card: "1" },
+            { from: "r_user_sale", to: "e_sales", card: "N" },
+
+            // User - mengatur - Kontrol (1 - 1)
+            { from: "e_users", to: "r_user_ctrl", card: "1" },
+            { from: "r_user_ctrl", to: "e_controls", card: "1" },
+
+            // User - mengatur - Layanan (1 - N)
+            { from: "e_users", to: "r_user_serv", card: "1" },
+            { from: "r_user_serv", to: "e_services", card: "N" },
+
+            // User - memoderasi - Testimoni (1 - N)
+            { from: "e_users", to: "r_user_test", card: "1" },
+            { from: "r_user_test", to: "e_testimonials", card: "N" }
+        ];
+
+        // Deep copy data for reset
+        let nodes = JSON.parse(JSON.stringify(initialNodes));
+        let links = JSON.parse(JSON.stringify(initialLinks));
+
+        // Generate entity-attribute links automatically
+        nodes.forEach(node => {
+            if (node.type === "attribute" && node.parent) {
+                links.push({ from: node.parent, to: node.id });
+            }
+        });
+
+        let activeNode = null;
+        let offset = { x: 0, y: 0 };
+        const svg = document.getElementById("erd-svg");
+        const linesGroup = document.getElementById("lines-group");
+        const cardinalityGroup = document.getElementById("cardinality-group");
+        const nodesGroup = document.getElementById("nodes-group");
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateErdStyle();
+            updateErdFont();
+            render();
+        });
+
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById("themeBtn");
+            body.classList.toggle("theme-light");
+            if (body.classList.contains("theme-light")) {
+                btn.textContent = "🌓 Mode Gelap";
+            } else {
+                btn.textContent = "🌓 Mode Terang (Cetak)";
+            }
+        }
+
+        function updateErdStyle() {
+            const style = document.getElementById("styleSelect").value;
+            svg.classList.remove("style-academic", "style-modern-bw", "style-dark", "theme-dark-canvas");
+            svg.classList.add("style-" + style);
+            if (style === 'dark') {
+                svg.classList.add("theme-dark-canvas");
+                svg.style.backgroundColor = "#080d1a";
+            } else {
+                svg.style.backgroundColor = "#ffffff";
+            }
+            render();
+        }
+
+        function updateErdFont() {
+            const font = document.getElementById("fontSelect").value;
+            svg.classList.remove("font-sans", "font-serif");
+            svg.classList.add("font-" + font);
+        }
+
+        function toggleAttributes() {
+            render();
+        }
+
+        function resetLayout() {
+            nodes = JSON.parse(JSON.stringify(initialNodes));
+            render();
+        }
+
+        // Render diagram
+        function render() {
+            linesGroup.innerHTML = "";
+            cardinalityGroup.innerHTML = "";
+            nodesGroup.innerHTML = "";
+
+            const attrMode = document.getElementById("attrToggle").value;
+
+            // Filter nodes based on attribute visibility
+            const visibleNodes = nodes.filter(n => {
+                if (n.type !== "attribute") return true;
+                if (attrMode === "show") return true;
+                if (attrMode === "key") return n.isKey === true;
+                return false;
+            });
+            const visibleLinks = links.filter(l => {
+                const sourceExists = visibleNodes.some(n => n.id === l.from);
+                const targetExists = visibleNodes.some(n => n.id === l.to);
+                return sourceExists && targetExists;
+            });
+
+            // 1. Draw connection lines
+            visibleLinks.forEach(link => {
+                const source = visibleNodes.find(n => n.id === link.from);
+                const target = visibleNodes.find(n => n.id === link.to);
+                if (source && target) {
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    let x1 = source.x;
+                    let y1 = source.y;
+                    let x2 = target.x;
+                    let y2 = target.y;
+
+                    // Converge attribute lines to parent entity's top/bottom center boundary
+                    if (source.type === "attribute" && target.type === "entity") {
+                        x2 = target.x;
+                        y2 = (source.y < target.y) ? (target.y - 23) : (target.y + 23);
+                    } else if (target.type === "attribute" && source.type === "entity") {
+                        x1 = source.x;
+                        y1 = (target.y < source.y) ? (source.y - 23) : (source.y + 23);
+                    }
+
+                    line.setAttribute("x1", x1);
+                    line.setAttribute("y1", y1);
+                    line.setAttribute("x2", x2);
+                    line.setAttribute("y2", y2);
+                    line.setAttribute("class", "connector-line");
+                    linesGroup.appendChild(line);
+
+                    // If it's a cardinality connection, add text near the end of the line
+                    if (link.card) {
+                        const labelText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        // Position text at 85% of line path towards the entity
+                        let xPos, yPos;
+                        if (source.type === "relationship") {
+                            xPos = source.x + (target.x - source.x) * 0.75;
+                            yPos = source.y + (target.y - source.y) * 0.75 - 8;
+                        } else {
+                            xPos = source.x + (target.x - source.x) * 0.25;
+                            yPos = source.y + (target.y - source.y) * 0.25 - 8;
+                        }
+
+                        labelText.setAttribute("x", xPos);
+                        labelText.setAttribute("y", yPos);
+                        labelText.setAttribute("text-anchor", "middle");
+                        labelText.setAttribute("font-size", "12px");
+                        labelText.setAttribute("font-weight", "bold");
+                        labelText.textContent = link.card;
+                        cardinalityGroup.appendChild(labelText);
+                    }
+                }
+            });
+
+            // 2. Draw nodes (rectangles, diamonds, ellipses)
+            visibleNodes.forEach(node => {
+                const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                group.setAttribute("class", "node-group");
+                group.setAttribute("transform", `translate(${node.x}, ${node.y})`);
+
+                group.addEventListener("mousedown", (e) => startDrag(e, node));
+                group.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    showDetails(node);
+                });
+
+                if (node.type === "entity") {
+                    // Entity: Rectangle
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    const width = 140;
+                    const height = 46;
+                    rect.setAttribute("x", -width/2);
+                    rect.setAttribute("y", -height/2);
+                    rect.setAttribute("width", width);
+                    rect.setAttribute("height", height);
+                    rect.setAttribute("class", "entity-rect");
+                    rect.setAttribute("rx", "2");
+                    group.appendChild(rect);
+
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("dy", "5");
+                    text.setAttribute("font-size", "11px");
+                    text.setAttribute("font-weight", "800");
+                    text.textContent = node.label;
+                    group.appendChild(text);
+
+                } else if (node.type === "relationship") {
+                    // Relationship: Diamond (Belah Ketupat)
+                    const diamond = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                    const size = 50;
+                    // Diamond points: top, right, bottom, left
+                    const points = `0,${-size/2} ${size},0 0,${size/2} ${-size},0`;
+                    diamond.setAttribute("points", points);
+                    diamond.setAttribute("class", "relationship-diamond");
+                    group.appendChild(diamond);
+
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("dy", "4");
+                    text.setAttribute("font-size", "10px");
+                    text.setAttribute("font-style", "italic");
+                    text.textContent = node.label;
+                    group.appendChild(text);
+
+                } else if (node.type === "attribute") {
+                    // Attribute: Ellipse (Oval)
+                    const ellipse = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+                    const rx = 52;
+                    const ry = 22;
+                    ellipse.setAttribute("rx", rx);
+                    ellipse.setAttribute("ry", ry);
+                    ellipse.setAttribute("class", "attribute-ellipse");
+                    group.appendChild(ellipse);
+
+                    const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    text.setAttribute("text-anchor", "middle");
+                    text.setAttribute("dy", "4");
+                    text.setAttribute("font-size", "10px");
+                    if (node.isKey) {
+                        text.setAttribute("class", "key-underlined");
+                    }
+                    text.textContent = node.label;
+                    group.appendChild(text);
+                }
+
+                nodesGroup.appendChild(group);
+            });
+        }
+
+        // Drag and drop handlers
+        function startDrag(e, node) {
+            e.preventDefault();
+            activeNode = node;
+            
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            offset.x = clientX - node.x;
+            offset.y = clientY - node.y;
+
+            document.addEventListener("mousemove", dragMove);
+            document.addEventListener("mouseup", endDrag);
+        }
+
+        function dragMove(e) {
+            if (!activeNode) return;
+            e.preventDefault();
+
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            activeNode.x = Math.max(50, Math.min(clientX - offset.x, 1200));
+            activeNode.y = Math.max(40, Math.min(clientY - offset.y, 910));
+
+            render();
+        }
+
+        function endDrag() {
+            activeNode = null;
+            document.removeEventListener("mousemove", dragMove);
+            document.removeEventListener("mouseup", endDrag);
+        }
+
+        // Show details in detail panel
+        function showDetails(node) {
+            const content = document.getElementById("detailContent");
+            if (node.type === "entity") {
+                let columnsInfo = "";
+                if (node.id === "e_users") {
+                    columnsInfo = "Menyimpan akun pengguna sistem (Admin Gudang & Owner) untuk kontrol akses fitur.";
+                } else if (node.id === "e_suppliers") {
+                    columnsInfo = "Menyimpan data pemasok variasi mobil dengan parameter <code>lead_time_rata_rata</code>.";
+                } else if (node.id === "e_products") {
+                    columnsInfo = "Menyimpan daftar produk variasi mobil. Terhubung dengan Supplier (1 ke N) dan Kontrol Inventori (1 ke 1).";
+                } else if (node.id === "e_sales") {
+                    columnsInfo = "Menyimpan riwayat data penjualan untuk input perhitungan regresi linear.";
+                } else if (node.id === "e_purchases") {
+                    columnsInfo = "Menyimpan catatan pembelian barang masuk untuk menambah stok fisik.";
+                } else if (node.id === "e_controls") {
+                    columnsInfo = "Menyimpan parameter kontrol stok ROP (Reorder Point) dan status EWS Telegram.";
+                } else if (node.id === "e_services") {
+                    columnsInfo = "Menyimpan data katalog penawaran jasa pasang variasi mobil yang dipasang di Landing Page depan Budi Variasi.";
+                } else if (node.id === "e_testimonials") {
+                    columnsInfo = "Menyimpan ulasan dari Google Maps API atau input admin toko yang berfungsi sebagai social proof di Landing Page.";
+                }
+                content.innerHTML = `
+                    <div style="border-left: 4px solid var(--accent-color); padding-left: 12px;">
+                        <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 6px;">Entitas: <strong>${node.label}</strong></h4>
+                        <p>${columnsInfo}</p>
+                    </div>
+                `;
+            } else if (node.type === "relationship") {
+                content.innerHTML = `
+                    <div style="border-left: 4px solid #10b981; padding-left: 12px;">
+                        <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 6px;">Relasi: <strong>${node.label}</strong></h4>
+                        <p>Menghubungkan dua entitas dalam database. Misalnya, relasi <strong>menyuplai</strong> menghubungkan entitas Supplier dengan Produk dengan kardinalitas 1 ke N.</p>
+                    </div>
+                `;
+            } else if (node.type === "attribute") {
+                const parentNode = nodes.find(n => n.id === node.parent);
+                content.innerHTML = `
+                    <div style="border-left: 4px solid #8b5cf6; padding-left: 12px;">
+                        <h4 style="color: var(--text-main); font-size: 1rem; margin-bottom: 6px;">Atribut: <strong>${node.label}</strong></h4>
+                        <p>Atribut ini melekat pada entitas <strong>${parentNode ? parentNode.label : ''}</strong>. ${node.isKey ? 'Atribut ini merupakan <strong>Kunci Utama (Primary Key)</strong> yang ditandai dengan garis bawah.' : ''}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Export PNG function
+        function downloadAsPng() {
+            const style = document.getElementById("styleSelect").value;
+            const font = document.getElementById("fontSelect").value;
+            const gridBg = document.getElementById("grid-bg");
+
+            gridBg.setAttribute("fill", (style === 'dark') ? "#080d1a" : "#ffffff");
+
+            const width = 1250;
+            const height = 950;
+            const scale = 2.0;
+
+            const svgClone = svg.cloneNode(true);
+            const styleElement = document.createElementNS("http://www.w3.org/2000/svg", "style");
+
+            let styleContent = `
+                text { font-family: ${font === 'serif' ? "'Times New Roman', Times, serif" : "Arial, sans-serif"} !important; }
+                .entity-rect { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                .relationship-diamond { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                .attribute-ellipse { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1px !important; }
+                .connector-line { stroke: #000000 !important; stroke-width: 1.2px !important; }
+                text { fill: #000000 !important; }
+                .key-underlined { text-decoration: underline !important; }
+            `;
+
+            if (style === 'modern-bw') {
+                styleContent = `
+                    text { font-family: ${font === 'serif' ? "'Times New Roman', Times, serif" : "Arial, sans-serif"} !important; }
+                    .entity-rect { fill: #ffffff !important; stroke: #0f172a !important; stroke-width: 2px !important; }
+                    .relationship-diamond { fill: #f8fafc !important; stroke: #0f172a !important; stroke-width: 2px !important; }
+                    .attribute-ellipse { fill: #ffffff !important; stroke: #475569 !important; stroke-width: 1.2px !important; }
+                    .connector-line { stroke: #475569 !important; stroke-width: 1.5px !important; }
+                    text { fill: #0f172a !important; }
+                    .key-underlined { font-weight: bold !important; text-decoration: underline !important; }
+                `;
+            } else if (style === 'dark') {
+                styleContent = `
+                    text { font-family: ${font === 'serif' ? "'Times New Roman', Times, serif" : "Arial, sans-serif"} !important; }
+                    .entity-rect { fill: #0b1329 !important; stroke: #3b82f6 !important; stroke-width: 2px !important; }
+                    .relationship-diamond { fill: #0b1329 !important; stroke: #10b981 !important; stroke-width: 2px !important; }
+                    .attribute-ellipse { fill: #0b1329 !important; stroke: #8b5cf6 !important; stroke-width: 1.2px !important; }
+                    .connector-line { stroke: #475569 !important; stroke-width: 1.5px !important; }
+                    text { fill: #f1f5f9 !important; }
+                    .key-underlined { fill: #a78bfa !important; font-weight: bold !important; text-decoration: underline !important; }
+                `;
+            }
+
+            styleElement.textContent = styleContent;
+            svgClone.insertBefore(styleElement, svgClone.firstChild);
+
+            const svgString = new XMLSerializer().serializeToString(svgClone);
+            const svgBase64 = btoa(unescape(encodeURIComponent(svgString)));
+            const imgSrc = 'data:image/svg+xml;base64,' + svgBase64;
+
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                const ctx = canvas.getContext('2d');
+                ctx.scale(scale, scale);
+
+                ctx.fillStyle = (style === 'dark') ? "#080d1a" : "#ffffff";
+                ctx.fillRect(0, 0, width, height);
+                ctx.drawImage(img, 0, 0, width, height);
+
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = `erd_chen_budi_variasi_${style}.png`;
+                link.href = dataUrl;
+                link.click();
+
+                gridBg.setAttribute("fill", "url(#gridPattern)");
+            };
+            img.src = imgSrc;
+        }
+
+        // Download HTML File directly
+        function downloadHtmlFile() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: "text/html" });
+            const link = document.createElement("a");
+            link.download = "erd_chen_budi_variasi.html";
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+    </script>
+</body>
+</html>

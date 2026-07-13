@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DFD Level 0 &amp; Level 1 - Budi Variasi Mobil</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #080d1a;
+            --bg-card: #0b1329;
+            --bg-viewport: #0f172a;
+            --border-color: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --accent-color: #3b82f6;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        body.theme-light {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-viewport: #f1f5f9;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-color: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .header-title span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background-color: var(--bg-viewport);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            background-color: var(--accent-color);
+        }
+
+        .academic-info {
+            max-width: 1200px;
+            margin: 0 auto 24px auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .academic-info strong {
+            color: var(--text-main);
+        }
+
+        .tabs-container {
+            max-width: 1200px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: var(--accent-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .canvas-card {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .card-title p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .canvas-wrapper {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 460px;
+        }
+
+        svg {
+            user-select: none;
+            background-color: #ffffff;
+        }
+
+        .entity-box rect {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 2px;
+        }
+
+        .process-circle circle {
+            fill: #ffffff;
+            stroke: #000000;
+            stroke-width: 2px;
+        }
+
+        .arrow-line {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+
+        .datastore-line {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+
+        .text-entity {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            fill: #000000;
+            letter-spacing: 0.05em;
+        }
+
+        .text-process {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            fill: #000000;
+        }
+
+        .text-flow {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 7.5px;
+            font-weight: 600;
+            fill: #000000;
+        }
+
+        .text-title {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            fill: #0f172a;
+            letter-spacing: 0.05em;
+        }
+
+        .flow-group {
+            cursor: pointer;
+        }
+
+        .flow-group:hover .arrow-line {
+            stroke: #2563eb;
+            stroke-width: 2.5px;
+        }
+
+        .flow-group:hover .text-flow {
+            fill: #2563eb;
+            font-weight: 800;
+        }
+
+        .flow-group.active .arrow-line {
+            stroke: #2563eb;
+            stroke-width: 2.5px;
+        }
+
+        .flow-group.active .text-flow {
+            fill: #2563eb;
+            font-weight: 800;
+        }
+
+        .detail-panel {
+            max-width: 1200px;
+            margin: 16px auto 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: none;
+            box-shadow: var(--shadow);
+        }
+
+        .detail-panel h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .detail-panel p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-muted);
+        }
+
+        .marker-path {
+            fill: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Diagram Alir Data (DFD)</h1>
+            <span>Monokrom Hitam-Putih (Format Standar Input &amp; Informasi Skripsi)</span>
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="toggleTheme()" id="themeBtn">🌓 Mode Terang (Cetak)</button>
+            <a href="/erd_chen.html" class="btn">📐 Lihat ERD Chen</a>
+            <a href="/flowchart_operasional.html" class="btn">📊 Lihat Flowchart</a>
+            <a href="/erd.html" class="btn">🔑 Lihat Skema ERD</a>
+            <a href="/admin/dashboard" class="btn btn-primary">Kembali ke Admin ↗</a>
+        </div>
+    </header>
+
+    <div class="academic-info">
+        💡 <strong>Petunjuk Skripsi:</strong> Aliran data yang <strong>masuk ke sistem</strong> (input) diawali dengan kata <strong>"Input"</strong>, sedangkan aliran data yang <strong>keluar dari sistem</strong> (output ke entitas) diawali dengan kata <strong>"Informasi"</strong>. Klik pada aliran panah untuk melihat deskripsi akademik detilnya.
+    </div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('level0')">Diagram Konteks (Level 0)</button>
+        <button class="tab-btn" onclick="switchTab('level1')">Data Flow Diagram (Level 1)</button>
+    </div>
+
+    <div class="canvas-card">
+        <div class="card-header">
+            <div class="card-title">
+                <h2>Diagram Konteks Sistem Inventory Control</h2>
+                <p>Otoritas Aliran Data Admin Gudang dan Pemilik Toko</p>
+            </div>
+            <button class="btn" id="downloadBtn" onclick="downloadAsJpg('svg-context', 'diagram_konteks_budi_variasi.jpg')">📥 Unduh JPG</button>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <!-- DFD LEVEL 0 (DIAGRAM KONTEKS) -->
+            <svg id="svg-context" width="1050" height="400" viewBox="0 0 1050 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arrow-right" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" class="marker-path" />
+                    </marker>
+                    <marker id="arrow-left" viewBox="0 0 10 10" refX="0" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="#000000" class="marker-path" />
+                    </marker>
+                </defs>
+
+                <!-- Title -->
+                <text x="525" y="30" class="text-title" text-anchor="middle">DIAGRAM KONTEKS - SISTEM INVENTORY CONTROL BUDI VARIASI</text>
+
+                <!-- 1. Entitas: ADMIN GUDANG (Left) -->
+                <g class="entity-box">
+                    <rect x="40" y="60" width="180" height="280" rx="10" ry="10" />
+                    <text x="130" y="205" class="text-entity" text-anchor="middle">ADMIN GUDANG</text>
+                </g>
+
+                <!-- 2. Entitas: PEMILIK TOKO (OWNER) (Right) -->
+                <g class="entity-box">
+                    <rect x="800" y="60" width="210" height="280" rx="10" ry="10" />
+                    <text x="905" y="205" class="text-entity" text-anchor="middle">PEMILIK TOKO (OWNER)</text>
+                </g>
+
+                <!-- 3. Proses: Sistem Informasi Inventory Control & Peramalan ROP (Center) -->
+                <g class="process-circle">
+                    <circle cx="520" cy="200" r="130" />
+                    <text x="520" y="165" class="text-process" text-anchor="middle">Sistem Informasi</text>
+                    <text x="520" y="195" class="text-process" text-anchor="middle">Inventory Control &amp;</text>
+                    <text x="520" y="225" class="text-process" text-anchor="middle">Peramalan ROP</text>
+                    <text x="520" y="275" class="text-process" text-anchor="middle">0</text>
+                </g>
+
+                <!-- 4. Aliran Data Left (Admin Gudang <-> Process) -->
+                <!-- Y = 80: Input Data Login Akun -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-1', 'Input Data Login Akun', 'Admin Gudang mengirimkan email & password sebagai input autentikasi masuk ke sistem.')">
+                    <path d="M 220 80 L 400 80" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="310" y="75" class="text-flow" text-anchor="middle">Input Data Login Akun</text>
+                </g>
+
+                <!-- Y = 110: Input Data Master Produk & Kategori -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-2', 'Input Data Master Produk & Kategori', 'Admin Gudang menginputkan data produk baru, harga jual, dan kategori barang.')">
+                    <path d="M 220 110 L 392 110" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="306" y="105" class="text-flow" text-anchor="middle">Input Data Master Produk &amp; Kategori</text>
+                </g>
+
+                <!-- Y = 140: Input Data Transaksi Barang Masuk -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-3', 'Input Data Transaksi Barang Masuk', 'Admin Gudang menginputkan transaksi pembelian/barang masuk dari supplier.')">
+                    <path d="M 220 140 L 390 140" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="305" y="135" class="text-flow" text-anchor="middle">Input Data Transaksi Barang Masuk</text>
+                </g>
+
+                <!-- Y = 170: Input Data Transaksi Penjualan -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-4', 'Input Data Transaksi Penjualan', 'Admin Gudang menginputkan transaksi penjualan kasir ecer.')">
+                    <path d="M 220 170 L 390 170" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="305" y="165" class="text-flow" text-anchor="middle">Input Data Transaksi Penjualan</text>
+                </g>
+
+                <!-- Y = 230: Informasi Status Autentikasi / Login -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-5', 'Informasi Status Autentikasi / Login', 'Sistem mengirimkan keluaran status apakah login sukses atau gagal.')">
+                    <path d="M 390 230 L 220 230" class="arrow-line" marker-end="url(#arrow-left)" />
+                    <text x="305" y="225" class="text-flow" text-anchor="middle">Informasi Status Autentikasi / Login</text>
+                </g>
+
+                <!-- Y = 260: Informasi Stok Riil Gudang -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-6', 'Informasi Stok Riil Gudang', 'Sistem menampilkan informasi stok riil gudang yang terupdate secara real-time.')">
+                    <path d="M 390 260 L 220 260" class="arrow-line" marker-end="url(#arrow-left)" />
+                    <text x="305" y="255" class="text-flow" text-anchor="middle">Informasi Stok Riil Gudang</text>
+                </g>
+
+                <!-- Y = 290: Informasi Laporan Riwayat Transaksi -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-7', 'Informasi Laporan Riwayat Transaksi', 'Sistem menyajikan riwayat logistik penjualan/pembelian barang.')">
+                    <path d="M 392 290 L 220 290" class="arrow-line" marker-end="url(#arrow-left)" />
+                    <text x="306" y="285" class="text-flow" text-anchor="middle">Informasi Laporan Riwayat Transaksi</text>
+                </g>
+
+                <!-- 5. Aliran Data Right (Pemilik Toko <-> Process) -->
+                <!-- Y = 80: Input Data Login Akun -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-8', 'Input Data Login Akun', 'Pemilik Toko mengirimkan email & password sebagai input autentikasi masuk ke sistem.')">
+                    <path d="M 800 80 L 640 80" class="arrow-line" marker-end="url(#arrow-left)" />
+                    <text x="720" y="75" class="text-flow" text-anchor="middle">Input Data Login Akun</text>
+                </g>
+
+                <!-- Y = 110: Input Permintaan Analisis ROP & Prediksi -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-9', 'Input Permintaan Analisis ROP & Prediksi', 'Pemilik Toko meminta sistem menghitung peramalan penjualan linear regression dan titik pemesanan kembali (ROP).')">
+                    <path d="M 800 110 L 648 110" class="arrow-line" marker-end="url(#arrow-left)" />
+                    <text x="724" y="105" class="text-flow" text-anchor="middle">Input Permintaan Analisis ROP &amp; Prediksi</text>
+                </g>
+
+                <!-- Y = 140: Input Data Update Status "On Order" -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-10', 'Input Data Update Status &quot;On Order&quot;', 'Pemilik Toko mengubah status purchase order menjadi On Order setelah memesan ke supplier.')">
+                    <path d="M 800 140 L 650 140" class="arrow-line" marker-end="url(#arrow-left)" />
+                    <text x="725" y="135" class="text-flow" text-anchor="middle">Input Data Update Status "On Order"</text>
+                </g>
+
+                <!-- Y = 200: Informasi Status Autentikasi / Login -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-11', 'Informasi Status Autentikasi / Login', 'Sistem mengirim status hasil login ke Pemilik Toko.')">
+                    <path d="M 650 200 L 800 200" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="725" y="195" class="text-flow" text-anchor="middle">Informasi Status Autentikasi / Login</text>
+                </g>
+
+                <!-- Y = 230: Informasi Dashboard Grafik Prediksi & ROP -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-12', 'Informasi Dashboard Grafik Prediksi & ROP', 'Sistem menyajikan visualisasi grafik peramalan penjualan bulanan dan analisis ROP.')">
+                    <path d="M 648 230 L 800 230" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="724" y="225" class="text-flow" text-anchor="middle">Informasi Dashboard Grafik Prediksi &amp; ROP</text>
+                </g>
+
+                <!-- Y = 260: Informasi Alert / Notifikasi Kritis ROP -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-13', 'Informasi Alert / Notifikasi Kritis ROP', 'Sistem mengirimkan push notifikasi via Telegram jika stok fisik produk di bawah batas ROP.')">
+                    <path d="M 640 260 L 800 260" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="720" y="255" class="text-flow" text-anchor="middle">Informasi Alert / Notifikasi Kritis ROP</text>
+                </g>
+
+                <!-- Y = 290: Informasi Dokumen Cetak PO (PDF) -->
+                <g class="flow-group" onclick="showDetails(this, 'flow-14', 'Informasi Dokumen Cetak PO (PDF)', 'Sistem menerbitkan berkas PDF purchase order untuk diunduh dan dicetak Pemilik Toko.')">
+                    <path d="M 640 290 L 800 290" class="arrow-line" marker-end="url(#arrow-right)" />
+                    <text x="720" y="285" class="text-flow" text-anchor="middle">Informasi Dokumen Cetak PO (PDF)</text>
+                </g>
+            </svg>
+
+            <!-- DFD LEVEL 1 (SESUAI GAMBAR DRAFT 1) -->
+            <svg id="svg-dfd1" width="1100" height="800" viewBox="0 0 1100 800" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <defs>
+                    <marker id="arrow-right-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#000000" class="marker-path" />
+                    </marker>
+                    <marker id="arrow-left-1" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="#000000" class="marker-path" />
+                    </marker>
+                </defs>
+
+                <!-- Title -->
+                <text x="550" y="30" class="text-title" text-anchor="middle">DATA FLOW DIAGRAM (DFD) LEVEL 1 - SISTEM INVENTORY CONTROL</text>
+
+                <!-- 1. Entity: ADMIN GUDANG (Left) -->
+                <g class="entity-box">
+                    <rect x="40" y="80" width="160" height="570" rx="10" ry="10" />
+                    <text x="120" y="365" class="text-entity" text-anchor="middle">ADMIN GUDANG</text>
+                </g>
+
+                <!-- 2. Entity: PEMILIK TOKO (Right) -->
+                <g class="entity-box">
+                    <rect x="900" y="80" width="160" height="570" rx="10" ry="10" />
+                    <text x="980" y="365" class="text-entity" text-anchor="middle">PEMILIK TOKO</text>
+                </g>
+
+                <!-- 3. Processes (Circles) -->
+                <!-- 1.0 Manajemen Autentikasi -->
+                <g class="process-circle">
+                    <circle cx="550" cy="110" r="50" />
+                    <line x1="504" y1="100" x2="596" y2="100" stroke="#000000" stroke-width="1.5" />
+                    <text x="550" y="92" class="text-process" text-anchor="middle">1.0</text>
+                    <text x="550" y="115" class="text-process" text-anchor="middle">Manajemen</text>
+                    <text x="550" y="130" class="text-process" text-anchor="middle">Autentikasi</text>
+                </g>
+
+                <!-- 2.0 Kelola Data Master Produk -->
+                <g class="process-circle">
+                    <circle cx="330" cy="320" r="50" />
+                    <line x1="284" y1="310" x2="376" y2="310" stroke="#000000" stroke-width="1.5" />
+                    <text x="330" y="302" class="text-process" text-anchor="middle">2.0</text>
+                    <text x="330" y="325" class="text-process" text-anchor="middle">Kelola Data</text>
+                    <text x="330" y="340" class="text-process" text-anchor="middle">Master Produk</text>
+                </g>
+
+                <!-- 3.0 Catat Transaksi Masuk & Keluar -->
+                <g class="process-circle">
+                    <circle cx="330" cy="520" r="50" />
+                    <line x1="284" y1="510" x2="376" y2="510" stroke="#000000" stroke-width="1.5" />
+                    <text x="330" y="502" class="text-process" text-anchor="middle">3.0</text>
+                    <text x="330" y="525" class="text-process" text-anchor="middle">Catat Transaksi</text>
+                    <text x="330" y="540" class="text-process" text-anchor="middle">Masuk &amp; Keluar</text>
+                </g>
+
+                <!-- 4.0 Peramalan ROP & Prediksi -->
+                <g class="process-circle">
+                    <circle cx="770" cy="320" r="50" />
+                    <line x1="724" y1="310" x2="816" y2="310" stroke="#000000" stroke-width="1.5" />
+                    <text x="770" y="302" class="text-process" text-anchor="middle">4.0</text>
+                    <text x="770" y="325" class="text-process" text-anchor="middle">Peramalan ROP</text>
+                    <text x="770" y="340" class="text-process" text-anchor="middle">&amp; Prediksi</text>
+                </g>
+
+                <!-- 5.0 Manajemen Pemesanan PO -->
+                <g class="process-circle">
+                    <circle cx="770" cy="520" r="50" />
+                    <line x1="724" y1="510" x2="816" y2="510" stroke="#000000" stroke-width="1.5" />
+                    <text x="770" y="502" class="text-process" text-anchor="middle">5.0</text>
+                    <text x="770" y="525" class="text-process" text-anchor="middle">Manajemen</text>
+                    <text x="770" y="540" class="text-process" text-anchor="middle">Pemesanan PO</text>
+                </g>
+
+                <!-- 4. Datastores (Standard Open-Ended Shape) -->
+                <!-- D1: Tabel Pengguna -->
+                <g class="datastore-group">
+                    <path d="M 625 200 L 475 200 M 475 200 L 475 240 L 625 240 M 510 200 L 510 240" class="datastore-line" />
+                    <text x="492" y="225" class="text-process" text-anchor="middle">D1</text>
+                    <text x="567" y="225" class="text-flow" text-anchor="middle">Tabel Pengguna</text>
+                </g>
+
+                <!-- D2: Tabel Data Produk -->
+                <g class="datastore-group">
+                    <path d="M 625 300 L 475 300 M 475 300 L 475 340 L 625 340 M 510 300 L 510 340" class="datastore-line" />
+                    <text x="492" y="325" class="text-process" text-anchor="middle">D2</text>
+                    <text x="567" y="325" class="text-flow" text-anchor="middle">Tabel Data Produk</text>
+                </g>
+
+                <!-- D3: Tabel Historis Transaksi -->
+                <g class="datastore-group">
+                    <path d="M 625 500 L 475 500 M 475 500 L 475 540 L 625 540 M 510 500 L 510 540" class="datastore-line" />
+                    <text x="492" y="525" class="text-process" text-anchor="middle">D3</text>
+                    <text x="567" y="525" class="text-flow" text-anchor="middle">Tabel Historis Transaksi</text>
+                </g>
+
+                <!-- D4: Tabel Dokumen PO -->
+                <g class="datastore-group">
+                    <path d="M 625 700 L 475 700 M 475 700 L 475 740 L 625 740 M 510 700 L 510 740" class="datastore-line" />
+                    <text x="492" y="725" class="text-process" text-anchor="middle">D4</text>
+                    <text x="567" y="725" class="text-flow" text-anchor="middle">Tabel Dokumen PO</text>
+                </g>
+
+                <!-- 5. Flows between Entities and Processes -->
+                <!-- Process 1.0 (Manajemen Autentikasi) -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-1', 'Input Data Login Akun', 'Admin Gudang menginput kredensial email & password.')">
+                    <path d="M 200 100 L 500 100" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="350" y="95" class="text-flow" text-anchor="middle">Input Data Login Akun</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-2', 'Informasi Status Autentikasi / Login', 'Sistem mengirimkan keluaran status login kepada Admin Gudang.')">
+                    <path d="M 500 120 L 200 120" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="350" y="135" class="text-flow" text-anchor="middle">Informasi Status Autentikasi / Login</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-3', 'Input Data Login Akun (Pemilik Toko)', 'Pemilik Toko menginput kredensial login.')">
+                    <path d="M 900 100 L 600 100" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="750" y="95" class="text-flow" text-anchor="middle">Input Data Login Akun</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-4', 'Informasi Status Autentikasi / Login (Pemilik Toko)', 'Sistem mengirimkan keluaran status login ke Pemilik Toko.')">
+                    <path d="M 600 120 L 900 120" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="750" y="135" class="text-flow" text-anchor="middle">Informasi Status Autentikasi / Login</text>
+                </g>
+
+                <!-- Process 2.0 (Kelola Data Master Produk) -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-5', 'Input Data Kategori &amp; Produk Baru', 'Admin Gudang menginput data kategori dan produk SKU baru.')">
+                    <path d="M 200 300 L 280 300" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="240" y="295" class="text-flow" text-anchor="middle">Input Data Kategori &amp; Produk Baru</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-6', 'Informasi Stok &amp; Barang', 'Sistem mengembalikan informasi list barang terupdate.')">
+                    <path d="M 280 340 L 200 340" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="240" y="355" class="text-flow" text-anchor="middle">Informasi Stok &amp; Barang</text>
+                </g>
+
+                <!-- Process 3.0 (Catat Transaksi Masuk & Keluar) -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-7', 'Input Data Barang Masuk &amp; Penjualan', 'Admin Gudang menginput transaksi barang masuk atau penjualan kasir.')">
+                    <path d="M 200 500 L 280 500" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="240" y="495" class="text-flow" text-anchor="middle">Input Data Barang Masuk &amp; Penjualan</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-8', 'Informasi Laporan Riwayat Transaksi', 'Sistem menampilkan riwayat laporan pembelian & penjualan.')">
+                    <path d="M 280 540 L 200 540" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="240" y="555" class="text-flow" text-anchor="middle">Informasi Laporan Riwayat Transaksi</text>
+                </g>
+
+                <!-- Process 4.0 (Peramalan ROP & Prediksi) -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-9', 'Input Perintah Hitung Analisis ROP', 'Pemilik Toko mengirimkan instruksi untuk menghitung ROP & Peramalan.')">
+                    <path d="M 900 300 L 820 300" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="860" y="295" class="text-flow" text-anchor="middle">Input Perintah Hitung Analisis ROP</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-10', 'Informasi Dashboard Prediksi &amp; Alert Kritis', 'Sistem menampilkan dashboard tren peramalan dan alert ROP.')">
+                    <path d="M 820 340 L 900 340" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="860" y="355" class="text-flow" text-anchor="middle">Informasi Dashboard Prediksi &amp; Alert Kritis</text>
+                </g>
+
+                <!-- Process 5.0 (Manajemen Pemesanan PO) -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-11', 'Input Update Status &quot;On Order&quot;', 'Pemilik Toko mengonfirmasi pesanan ke supplier dengan memperbarui status menjadi On Order.')">
+                    <path d="M 900 500 L 820 500" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="860" y="495" class="text-flow" text-anchor="middle">Input Update Status "On Order"</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-12', 'Informasi Unduh Dokumen Cetak PO PDF', 'Sistem menyediakan tautan untuk mengunduh berkas purchase order.')">
+                    <path d="M 820 540 L 900 540" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="860" y="555" class="text-flow" text-anchor="middle">Informasi Unduh Dokumen Cetak PO PDF</text>
+                </g>
+
+                <!-- Database/Internal Flows (No Prefixes) -->
+                <!-- Proc 1.0 <-> D1 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db1a', 'Cek Data', 'Proses mencocokkan input login ke datastore user.')">
+                    <path d="M 540 160 L 540 200" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="532" y="180" class="text-flow" text-anchor="end">Cek Data</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db1b', 'Validasi Akun', 'Datastore mengembalikan hasil verifikasi password.')">
+                    <path d="M 560 200 L 560 160" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="568" y="180" class="text-flow" text-anchor="start">Validasi Akun</text>
+                </g>
+
+                <!-- Proc 2.0 <-> D2 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db2a', 'Simpan Data Produk', 'Proses 2.0 menulis data master produk SKU baru ke datastore.')">
+                    <path d="M 380 310 L 475 310" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="427" y="305" class="text-flow" text-anchor="middle">Simpan Data Produk</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db2b', 'Detail Barang', 'Datastore mengembalikan data list produk terdaftar.')">
+                    <path d="M 475 330 L 380 330" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="427" y="342" class="text-flow" text-anchor="middle">Detail Barang</text>
+                </g>
+
+                <!-- Proc 3.0 <-> D2 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db3a', 'Update Kuota Stok Barang', 'Proses 3.0 mengubah jumlah kuantitas stok produk setelah transaksi.')">
+                    <path d="M 320 470 Q 320 375 475 335" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="360" y="365" class="text-flow" text-anchor="start">Update Kuota Stok Barang</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db3b', 'Cek Stok Aktual', 'Proses 3.0 memeriksa sisa stok riil sebelum melayani transaksi penjualan.')">
+                    <path d="M 475 325 Q 350 350 350 470" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="410" y="415" class="text-flow" text-anchor="start">Cek Stok Aktual</text>
+                </g>
+
+                <!-- Proc 3.0 <-> D3 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db4a', 'Catat Log Transaksi', 'Proses 3.0 menulis rekaman riwayat transaksi baru.')">
+                    <path d="M 380 510 L 475 510" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="427" y="505" class="text-flow" text-anchor="middle">Catat Log Transaksi</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db4b', 'Data Riwayat', 'Datastore menyajikan rekaman log riwayat transaksi.')">
+                    <path d="M 475 530 L 380 530" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="427" y="542" class="text-flow" text-anchor="middle">Data Riwayat</text>
+                </g>
+
+                <!-- Proc 4.0 <-> D2 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db5a', 'Data Stok &amp; Limit Saat Ini', 'Proses 4.0 mengambil angka stok fisik & limit minimum untuk kalkulasi ROP.')">
+                    <path d="M 625 310 L 720 310" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="672" y="305" class="text-flow" text-anchor="middle">Data Stok &amp; Limit Saat Ini</text>
+                </g>
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db5b', 'Simpan Parameter ROP Baru', 'Proses 4.0 memperbarui nilai safety stock dan batas ROP pada produk.')">
+                    <path d="M 720 330 L 625 330" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="672" y="342" class="text-flow" text-anchor="middle">Simpan Parameter ROP Baru</text>
+                </g>
+
+                <!-- Proc 4.0 -> D3 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db6', 'Data Penjualan (Regresi Linear)', 'Proses 4.0 menarik rekaman volume transaksi penjualan bulanan.')">
+                    <path d="M 625 510 Q 720 460 760 365" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="685" y="430" class="text-flow" text-anchor="middle">Data Penjualan (Regresi Linear)</text>
+                </g>
+
+                <!-- Proc 5.0 -> D2 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db7', 'Info Barang dgn Stok &lt; ROP', 'Proses 5.0 mendeteksi daftar produk yang sisa stoknya di bawah batas ROP.')">
+                    <path d="M 625 325 Q 700 420 760 475" class="arrow-line" marker-end="url(#arrow-right-1)" />
+                    <text x="710" y="405" class="text-flow" text-anchor="middle">Info Barang dgn Stok &lt; ROP</text>
+                </g>
+
+                <!-- Proc 5.0 -> D4 -->
+                <g class="flow-group" onclick="showDetails(this, 'dfd1-db8', 'Simpan Arsip Rekaman PO', 'Proses 5.0 mengarsipkan file purchase order terbit ke database.')">
+                    <path d="M 770 570 L 770 720 L 625 720" class="arrow-line" marker-end="url(#arrow-left-1)" />
+                    <text x="710" y="715" class="text-flow" text-anchor="middle">Simpan Arsip Rekaman PO</text>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="detail-panel" id="detailPanel">
+            <h3>📌 <span id="detailTitle">Pilih Aliran Data</span></h3>
+            <p id="detailDesc">Klik pada salah satu anak panah aliran data di atas untuk melihat rincian penjelasan akademis mengenai masukan atau informasi tersebut.</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(level) {
+            const level0Svg = document.getElementById('svg-context');
+            const level1Svg = document.getElementById('svg-dfd1');
+            const btn0 = document.querySelectorAll('.tab-btn')[0];
+            const btn1 = document.querySelectorAll('.tab-btn')[1];
+            const cardTitle = document.querySelector('.card-title h2');
+            const cardDesc = document.querySelector('.card-title p');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // Reset active flow highlighting
+            const activeFlows = document.querySelectorAll('.flow-group');
+            activeFlows.forEach(n => n.classList.remove('active'));
+
+            if (level === 'level0') {
+                level0Svg.style.display = 'block';
+                level1Svg.style.display = 'none';
+                btn0.classList.add('active');
+                btn1.classList.remove('active');
+                cardTitle.textContent = "Diagram Konteks Sistem Inventory Control";
+                cardDesc.textContent = "Otoritas Aliran Data Admin Gudang dan Pemilik Toko";
+                downloadBtn.setAttribute("onclick", "downloadAsJpg('svg-context', 'diagram_konteks_budi_variasi.jpg')");
+            } else {
+                level0Svg.style.display = 'none';
+                level1Svg.style.display = 'block';
+                btn0.classList.remove('active');
+                btn1.classList.add('active');
+                cardTitle.textContent = "Data Flow Diagram (DFD) Level 1";
+                cardDesc.textContent = "Dekomposisi Proses Autentikasi, Kelola Master, Transaksi, Peramalan ROP, dan Pemesanan PO";
+                downloadBtn.setAttribute("onclick", "downloadAsJpg('svg-dfd1', 'dfd_level1_budi_variasi.jpg')");
+            }
+            
+            // Hide the details panel on tab switch
+            document.getElementById('detailPanel').style.display = 'none';
+        }
+
+        // Theme toggler
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            
+            body.classList.toggle('theme-light');
+            
+            if (body.classList.contains('theme-light')) {
+                btn.textContent = "🌓 Mode Gelap";
+            } else {
+                btn.textContent = "🌓 Mode Terang (Cetak)";
+            }
+        }
+
+        // Details Panel trigger
+        function showDetails(element, flowId, title, desc) {
+            const activeFlows = document.querySelectorAll('.flow-group');
+            activeFlows.forEach(n => n.classList.remove('active'));
+            
+            if (element) {
+                element.classList.add('active');
+            }
+
+            document.getElementById('detailPanel').style.display = 'block';
+            document.getElementById('detailTitle').textContent = title;
+            document.getElementById('detailDesc').textContent = desc;
+        }
+
+        // High-resolution SVG to JPEG download
+        function downloadAsJpg(svgId, filename) {
+            const svgElement = document.getElementById(svgId);
+            if (!svgElement) return;
+
+            const width = parseInt(svgElement.getAttribute('width'), 10);
+            const height = parseInt(svgElement.getAttribute('height'), 10);
+            const scale = 2; // 2x for HD
+
+            const svgClone = svgElement.cloneNode(true);
+            svgClone.style.backgroundColor = '#ffffff';
+
+            // Inject styles directly into the cloned SVG
+            const styleElement = document.createElementNS("http://www.w3.org/2000/svg", "style");
+            styleElement.textContent = `
+                rect, circle { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 2px !important; }
+                path { fill: none !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                text { font-family: Arial, sans-serif !important; fill: #000000 !important; text-anchor: middle !important; }
+                .text-entity { font-size: 13px !important; font-weight: 800 !important; text-anchor: middle !important; }
+                .text-process { font-size: 12px !important; font-weight: 800 !important; text-anchor: middle !important; }
+                .text-flow { font-size: 7.5px !important; font-weight: 600 !important; text-anchor: middle !important; }
+                .text-title { font-size: 12px !important; font-weight: 800 !important; text-anchor: middle !important; }
+                .marker-path { fill: #000000 !important; }
+            `;
+            svgClone.insertBefore(styleElement, svgClone.firstChild);
+
+            const svgString = new XMLSerializer().serializeToString(svgClone);
+            const svgBase64 = btoa(unescape(encodeURIComponent(svgString)));
+            const imgSrc = 'data:image/svg+xml;base64,' + svgBase64;
+
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                const ctx = canvas.getContext('2d');
+
+                // Fill background with solid white
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                link.click();
+            };
+            img.src = imgSrc;
+        }
+    </script>
+</body>
+</html>

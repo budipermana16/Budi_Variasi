@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart Operasional - Budi Variasi Mobil</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #080d1a;
+            --bg-card: #0b1329;
+            --bg-viewport: #0f172a;
+            --border-color: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
+            --accent-color: #3b82f6;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        body.theme-light {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-viewport: #f1f5f9;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-color: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        header {
+            max-width: 1200px;
+            margin: 0 auto 24px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .header-title span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background-color: var(--bg-viewport);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            background-color: var(--accent-color);
+        }
+
+        .academic-info {
+            max-width: 1200px;
+            margin: 0 auto 24px auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        .academic-info strong {
+            color: var(--text-main);
+        }
+
+        .tabs-container {
+            max-width: 1200px;
+            margin: 0 auto 16px auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            border-color: var(--accent-color);
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .canvas-card {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .card-title p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .canvas-wrapper {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 500px;
+            max-height: 850px;
+        }
+
+        svg {
+            user-select: none;
+            background-color: #ffffff;
+        }
+
+        .node-group {
+            cursor: pointer;
+        }
+
+        .node-group rect,
+        .node-group polygon,
+        .node-group ellipse {
+            transition: fill 0.2s, stroke-width 0.2s, stroke 0.2s;
+        }
+
+        .node-group:hover rect,
+        .node-group:hover polygon,
+        .node-group:hover ellipse {
+            fill: #f8fafc !important;
+            stroke: #2563eb !important;
+            stroke-width: 2px !important;
+        }
+
+        .node-group.active rect,
+        .node-group.active polygon,
+        .node-group.active ellipse {
+            fill: #eff6ff !important;
+            stroke: #2563eb !important;
+            stroke-width: 2px !important;
+        }
+
+        .arrow-line {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 1.5px;
+        }
+
+        .text-main {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            fill: #000000;
+            text-anchor: middle;
+        }
+
+        .text-sub {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 8.5px;
+            fill: #475569;
+            text-anchor: middle;
+        }
+
+        .text-title {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            fill: #0f172a;
+            text-anchor: middle;
+            letter-spacing: 0.05em;
+        }
+
+        .text-label-ya {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 9.5px;
+            font-weight: 800;
+            fill: #000000;
+            text-anchor: middle;
+        }
+
+        .text-label-tidak {
+            font-family: 'Outfit', 'Segoe UI', Arial, sans-serif;
+            font-size: 9.5px;
+            font-weight: 800;
+            fill: #000000;
+            text-anchor: middle;
+        }
+
+        .detail-panel {
+            max-width: 1200px;
+            margin: 16px auto 0 auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            display: none;
+            box-shadow: var(--shadow);
+        }
+
+        .detail-panel h3 {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .detail-panel p {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-muted);
+        }
+
+        .marker-path {
+            fill: #000000;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>Diagram Bagan Alir (Flowchart)</h1>
+            <span>Monokrom Hitam-Putih (Format Standar Publikasi Ilmiah)</span>
+        </div>
+        <div class="controls">
+            <button class="btn" onclick="toggleTheme()" id="themeBtn">🌓 Mode Terang (Cetak)</button>
+            <a href="/erd_chen.html" class="btn">📐 Lihat ERD Chen</a>
+            <a href="/diagram_konteks.html" class="btn">🌐 Lihat Diagram Konteks &amp; DFD</a>
+            <a href="/erd.html" class="btn">🔑 Lihat Skema ERD</a>
+            <a href="/admin/dashboard" class="btn btn-primary">Kembali ke Admin ↗</a>
+        </div>
+    </header>
+
+    <div class="academic-info">
+        💡 <strong>Petunjuk Skripsi:</strong> Anda dapat melihat bagan alir gabungan (sesuai draf skripsi Anda) atau bagan alir linier vertikal yang terpisah. Klik pada setiap bentuk bagan alir untuk membaca keterangan fungsi akademik terperincinya.
+    </div>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="switchTab('combined')">Flowchart Gabungan (Sistem)</button>
+        <button class="tab-btn" onclick="switchTab('gudang')">Flowchart Admin Gudang (Vertikal)</button>
+        <button class="tab-btn" onclick="switchTab('owner')">Flowchart Owner (Vertikal)</button>
+    </div>
+
+    <div class="canvas-card">
+        <div class="card-header">
+            <div class="card-title">
+                <h2 id="cardTitleText">Flowchart Sistem Inventory Control</h2>
+                <p id="cardDescText">Bagan alir terintegrasi untuk Admin Gudang dan Owner Budi Variasi</p>
+            </div>
+            <button class="btn" id="downloadBtn" onclick="downloadAsJpg('svg-combined', 'flowchart_gabungan_budi_variasi.jpg')">📥 Unduh JPG</button>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <!-- 1. FLOWCHART GABUNGAN (COMBINED) -->
+            <svg id="svg-combined" width="1000" height="1100" viewBox="0 0 1000 1100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <marker id="arrow-c" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000" class="marker-path" />
+                    </marker>
+                </defs>
+
+                <!-- Title -->
+                <text x="500" y="30" class="text-title" text-anchor="middle">FLOWCHART GABUNGAN SISTEM INVENTORY CONTROL - BUDI VARIASI</text>
+
+                <!-- Mulai (Oval) -->
+                <g class="node-group" onclick="showDetails('Mulai', 'Mulai (Start)', 'Titik awal jalannya seluruh sistem aplikasi Budi Variasi Mobil.')">
+                    <ellipse cx="500" cy="70" rx="60" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="500" y="74" class="text-main">Mulai</text>
+                </g>
+                <path d="M 500 92.5 L 500 130" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Input Email & Password (Parallelogram) -->
+                <g class="node-group" onclick="showDetails('InputCreds', 'Input Email &amp; Password', 'Pengguna memasukkan email dan password untuk masuk ke sistem.')">
+                    <polygon points="390,175 410,130 610,130 590,175" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="500" y="157" class="text-main">Input Email &amp; Password</text>
+                </g>
+                <path d="M 500 175 L 500 210" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Validasi Cocok? (Diamond) -->
+                <g class="node-group" onclick="showDetails('Validasi', 'Validasi Cocok?', 'Sistem mengecek kecocokan kredensial login dengan tabel user database MySQL.')">
+                    <polygon points="500,210 590,240 500,270 410,240" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="500" y="244" class="text-main">Validasi Cocok?</text>
+                </g>
+                <!-- Tidak Valid Loopback -->
+                <path d="M 410 240 L 330 240 L 330 152.5 L 390 152.5" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="310" y="230" class="text-label-tidak">Tidak</text>
+
+                <!-- Valid -> Cek Role -->
+                <path d="M 500 270 L 500 310" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="515" y="290" class="text-label-ya">Ya</text>
+
+                <!-- Cek Role? (Diamond) -->
+                <g class="node-group" onclick="showDetails('CekRole', 'Cek Role Akses?', 'Sistem mendeteksi tingkatan hak akses pengguna, apakah Admin Gudang atau Owner.')">
+                    <polygon points="500,310 580,340 500,370 420,340" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="500" y="344" class="text-main">Cek Role?</text>
+                </g>
+
+                <!-- Left Branch: Admin Gudang -->
+                <path d="M 420 340 L 250 340 L 250 400" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="330" y="330" class="text-label-ya">Admin Gudang</text>
+
+                <!-- Right Branch: Owner -->
+                <path d="M 580 340 L 750 340 L 750 400" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="670" y="330" class="text-label-ya">Owner</text>
+
+                <!-- ================== ADMIN GUDANG COLUMN ================== -->
+                <text x="250" y="390" class="text-title" text-anchor="middle">ALUR ADMIN GUDANG</text>
+
+                <!-- Menu Utama Admin Gudang (Rectangle) -->
+                <g class="node-group" onclick="showDetails('MenuAdmin', 'Menu Utama Admin Gudang', 'Dashboard kontrol back-office yang berisi pilihan menu kelola barang, transaksi kasir, dan pembelian.')">
+                    <rect x="140" y="400" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="250" y="427" class="text-main">Menu Utama Admin Gudang</text>
+                </g>
+                <path d="M 250 445 L 250 480" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Pilih Aksi Admin? (Diamond) -->
+                <g class="node-group" onclick="showDetails('AksiAdmin', 'Pilih Aksi Admin?', 'Admin Gudang memilih untuk melakukan aktivitas operasional barang/penjualan, atau keluar dari akun.')">
+                    <polygon points="250,480 340,510 250,540 160,510" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="250" y="514" class="text-main">Pilih Aksi Admin?</text>
+                </g>
+
+                <!-- Aktivitas Branch -->
+                <path d="M 160 510 L 110 510 L 110 570" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="130" y="500" class="text-label-ya">Aktivitas</text>
+
+                <!-- Aktivitas Operasional (Rectangle) -->
+                <g class="node-group" onclick="showDetails('OpsGudang', 'Aktivitas Operasional', 'Proses input kelola data master barang SKU baru, penjualan kasir ecer, atau barang masuk dari supplier.')">
+                    <rect x="10" y="570" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="110" y="590" class="text-main">Aktivitas Operasional</text>
+                    <text x="110" y="605" class="text-sub">Kelola Barang / Kasir / Pembelian</text>
+                </g>
+                <path d="M 110 615 L 110 650" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Update Database MySQL (Rectangle) -->
+                <g class="node-group" onclick="showDetails('UpdateDB', 'Update Database MySQL', 'Proses penyimpanan data transaksi dan otomatis memperbarui nilai jumlah persediaan barang riil.')">
+                    <rect x="10" y="650" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="110" y="670" class="text-main">Update Database MySQL</text>
+                    <text x="110" y="685" class="text-sub">Simpan Transaksi &amp; Perbarui Stok</text>
+                </g>
+                <!-- Loopback to Menu Utama Admin Gudang -->
+                <path d="M 110 695 L 110 720 L 5 720 L 5 422.5 L 140 422.5" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Logout Admin Branch -->
+                <path d="M 340 510 L 380 510 L 380 980 L 500 980" fill="none" stroke="#000000" stroke-width="1.5" />
+                <text x="365" y="500" class="text-label-tidak">Logout</text>
+
+                <!-- ================== OWNER COLUMN ================== -->
+                <text x="750" y="390" class="text-title" text-anchor="middle">ALUR OWNER (PAK BUDI)</text>
+
+                <!-- Bypass Admin Line (Bypass menu) -->
+                <path d="M 640 422.5 L 360 422.5" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="500" y="415" class="text-label-ya">Bypass Admin</text>
+
+                <!-- Menu Utama Owner (Rectangle) -->
+                <g class="node-group" onclick="showDetails('MenuOwner', 'Menu Utama Owner', 'Dashboard eksklusif owner yang menyediakan panel konfigurasi parameter, pengadaan ROP, dan riwayat PO.')">
+                    <rect x="640" y="400" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="427" class="text-main">Menu Utama Owner</text>
+                </g>
+                <path d="M 750 445 L 750 480" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Pilih Aksi Owner? (Diamond) -->
+                <g class="node-group" onclick="showDetails('AksiOwner', 'Pilih Aksi Owner?', 'Owner memilih fitur peramalan ROP, konfigurasi parameter logistik, manajemen akun, atau keluar.')">
+                    <polygon points="750,480 840,510 750,540 660,510" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="514" class="text-main">Pilih Aksi Owner?</text>
+                </g>
+
+                <!-- Setup SS & L Branch (Left) -->
+                <path d="M 660 510 L 580 510 L 580 570" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="610" y="500" class="text-label-ya">Setup SS &amp; L</text>
+
+                <!-- Setup Parameter (SS & L) (Rectangle) -->
+                <g class="node-group" onclick="showDetails('SetupParam', 'Setup Parameter (SS &amp; L)', 'Owner mengatur jumlah Safety Stock minimum barang dan batas waktu kirim (Lead Time) supplier.')">
+                    <rect x="480" y="570" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="580" y="590" class="text-main">Setup Parameter (SS &amp; L)</text>
+                    <text x="580" y="605" class="text-sub">Owner Konfigurasi Pengaman &amp; Lead</text>
+                </g>
+                <!-- Loopback to Menu Utama Owner -->
+                <path d="M 580 615 L 580 720 L 450 720 L 450 430 L 640 430" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Kelola Akun Branch (Right) -->
+                <path d="M 840 510 L 920 510 L 920 570" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="890" y="500" class="text-label-ya">Kelola Akun</text>
+
+                <!-- Kelola Akun Baru (Rectangle) -->
+                <g class="node-group" onclick="showDetails('KelolaAkun', 'Kelola Akun Baru', 'Owner mengedit atau membuat akun kredensial login user baru untuk Administrator baru.')">
+                    <rect x="820" y="570" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="920" y="590" class="text-main">Kelola Akun Baru</text>
+                    <text x="920" y="605" class="text-sub">Owner Kelola Kredensial User</text>
+                </g>
+                <!-- Loopback to Menu Utama Owner -->
+                <path d="M 920 615 L 920 720 L 990 720 L 990 422.5 L 860 422.5" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Buka ROP Branch (Middle) -->
+                <path d="M 750 540 L 750 570" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="765" y="555" class="text-label-ya">Buka ROP</text>
+
+                <!-- Tarik Data Penjualan Historis (Rectangle) -->
+                <g class="node-group" onclick="showDetails('TarikHistori', 'Tarik Data Penjualan Historis', 'Proses otomatis mengambil data rekapan angka penjualan barang bulanan pada masa lampau dari database.')">
+                    <rect x="650" y="570" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="590" class="text-main">Tarik Data Penjualan Historis</text>
+                    <text x="750" y="605" class="text-sub">Ambil Data Historis Bulanan MySQL</text>
+                </g>
+                <path d="M 750 615 L 750 650" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Kalkulasi Regresi Linear (Rectangle) -->
+                <g class="node-group" onclick="showDetails('KalkulasiRegresi', 'Kalkulasi Regresi Linear', 'Sistem menghitung nilai peramalan Y untuk memperkirakan rata-rata permintaan (d) bulan depan.')">
+                    <rect x="650" y="650" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="670" class="text-main">Kalkulasi Regresi Linear</text>
+                    <text x="750" y="685" class="text-sub">Hitung Y\' = a + bX &amp; Permintaan (d)</text>
+                </g>
+                <path d="M 750 695 L 750 730" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Kalkulasi ROP (Rectangle) -->
+                <g class="node-group" onclick="showDetails('KalkulasiROP', 'Kalkulasi ROP', 'Sistem menghitung angka titik reorder point (ROP) barang dengan rumus ROP = (d x L) + SS.')">
+                    <rect x="650" y="730" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="750" class="text-main">Kalkulasi ROP</text>
+                    <text x="750" y="765" class="text-sub">Hitung ROP = (d x L) + SS</text>
+                </g>
+                <path d="M 750 775 L 750 810" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Stok Fisik <= ROP? (Diamond) -->
+                <g class="node-group" onclick="showDetails('StokROP', 'Stok Fisik &lt;= ROP?', 'Evaluasi apakah jumlah stok produk di rak saat ini sudah kurang dari atau sama dengan titik ROP.')">
+                    <polygon points="750,810 840,840 750,870 660,840" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="844" class="text-main">Stok Fisik &lt;= ROP?</text>
+                </g>
+
+                <!-- Tidak (Aman) Branch -> Loopback left to Menu Owner -->
+                <path d="M 660 840 L 440 840 L 440 415 L 640 415" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="460" y="830" class="text-label-tidak">Tidak</text>
+
+                <!-- Ya (Kritis) Branch -->
+                <path d="M 750 870 L 750 910" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+                <text x="770" y="890" class="text-label-ya">Ya (Kritis)</text>
+
+                <!-- Kirim Telegram Alert (Rectangle) -->
+                <g class="node-group" onclick="showDetails('KirimTelegram', 'Kirim Telegram Alert', 'Sistem mengirimkan notifikasi pesan instan ke HP owner bahwa stok barang kritis dan harus diorder.')">
+                    <rect x="650" y="910" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="930" class="text-main">Kirim Telegram Alert</text>
+                    <text x="750" y="945" class="text-sub">Push Notification Bot API ke Owner</text>
+                </g>
+                <path d="M 750 955 L 750 990" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Buat & Ekspor PDF PO (Rectangle) -->
+                <g class="node-group" onclick="showDetails('ExportPDF', 'Buat &amp; Ekspor PDF PO', 'Sistem menerbitkan berkas PDF PO barang otomatis untuk dikirimkan ke supplier produk.')">
+                    <rect x="650" y="990" width="200" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="750" y="1010" class="text-main">Buat &amp; Ekspor PDF PO</text>
+                    <text x="750" y="1025" class="text-sub">Terbitkan Dokumen PO &amp; Set On Order</text>
+                </g>
+                <!-- Loopback to Menu Utama Owner -->
+                <path d="M 750 1035 L 750 1060 L 980 1060 L 980 415 L 860 415" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Logout Owner Branch -->
+                <path d="M 840 510 L 960 510 L 960 980 L 500 980" fill="none" stroke="#000000" stroke-width="1.5" />
+                <text x="940" y="500" class="text-label-tidak">Logout</text>
+
+                <!-- Arrow down to Selesai -->
+                <path d="M 500 980 L 500 1017.5" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-c)" />
+
+                <!-- Selesai (Oval) -->
+                <g class="node-group" onclick="showDetails('Selesai', 'Selesai (End)', 'Titik akhir dari alur eksekusi aplikasi untuk seluruh sesi.')">
+                    <ellipse cx="500" cy="1040" rx="60" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="500" y="1044" class="text-main">Selesai</text>
+                </g>
+            </svg>
+
+            <!-- 2. FLOWCHART ADMIN GUDANG (LINIER) -->
+            <svg id="svg-gudang" width="400" height="780" viewBox="0 0 400 780" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <defs>
+                    <marker id="arrow-gudang" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000" class="marker-path" />
+                    </marker>
+                </defs>
+
+                <!-- Title -->
+                <text x="200" y="30" class="text-title" text-anchor="middle">FLOWCHART OPERASIONAL - ADMIN GUDANG</text>
+
+                <!-- 1. Mulai -->
+                <g class="node-group" onclick="showDetails('mulai', 'Mulai', 'Titik awal jalannya operasional sistem untuk Admin Gudang.')">
+                    <rect x="100" y="50" width="200" height="45" rx="22.5" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="77" class="text-main" text-anchor="middle">Mulai</text>
+                </g>
+                <path d="M 200 95 L 200 130" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 2. Login -->
+                <g class="node-group" onclick="showDetails('login', 'Input Email &amp; Password', 'Admin Gudang menginput kredensial login (Email dan Password) pada halaman autentikasi.')">
+                    <rect x="90" y="130" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="157" class="text-main" text-anchor="middle">Input Email &amp; Password</text>
+                </g>
+                <path d="M 200 175 L 200 210" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 3. Validasi Login -->
+                <g class="node-group" onclick="showDetails('validasi', 'Validasi Login?', 'Sistem mencocokkan data login dengan database MySQL.')">
+                    <polygon points="200,210 290,240 200,270 110,240" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="244" class="text-main" text-anchor="middle">Validasi Login?</text>
+                </g>
+                <!-- Tidak Valid Loopback -->
+                <path d="M 110 240 L 50 240 L 50 152 L 90 152" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+                <text x="75" y="230" class="text-label-tidak" text-anchor="middle">Tidak</text>
+                
+                <!-- Valid / Ya -->
+                <path d="M 200 270 L 200 310" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+                <text x="215" y="290" class="text-label-ya" text-anchor="middle">Ya</text>
+
+                <!-- 4. Dashboard -->
+                <g class="node-group" onclick="showDetails('dashboard', 'Dashboard', 'Admin diarahkan masuk ke Dashboard back-office utama.')">
+                    <rect x="90" y="310" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="337" class="text-main" text-anchor="middle">Dashboard</text>
+                </g>
+                <path d="M 200 355 L 200 390" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 5. Kelola Data Toko -->
+                <g class="node-group" onclick="showDetails('kelola', 'Kelola Data Toko', 'Admin masuk ke menu pengelolaan barang, stok, supplier, atau menu transaksi penjualan.')">
+                    <rect x="90" y="390" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="417" class="text-main" text-anchor="middle">Kelola Data Toko</text>
+                </g>
+                <path d="M 200 435 L 200 470" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 6. Input Data Operasional -->
+                <g class="node-group" onclick="showDetails('input', 'Input Data Operasional', 'Admin menginput transaksi kasir, data barang baru, atau data PO masuk.')">
+                    <rect x="90" y="470" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="497" class="text-main" text-anchor="middle">Input Data Operasional</text>
+                </g>
+                <path d="M 200 515 L 200 550" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 7. Proses Update Database -->
+                <g class="node-group" onclick="showDetails('proses-db', 'Proses Update Database MySQL', 'Sistem memproses penyimpanan data dan otomatis memotong atau menambah jumlah stok fisik.')">
+                    <rect x="90" y="550" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="577" class="text-main" text-anchor="middle">Proses Update Database MySQL</text>
+                </g>
+                <path d="M 200 595 L 200 630" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 8. Simpan & Perbarui Stok -->
+                <g class="node-group" onclick="showDetails('simpan-stok', 'Simpan Transaksi &amp; Perbarui Stok', 'Data transaksi tersimpan permanen dan stok fisik terupdate di layar monitor.')">
+                    <rect x="90" y="630" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="657" class="text-main" text-anchor="middle">Simpan Transaksi &amp; Perbarui Stok</text>
+                </g>
+                <path d="M 200 675 L 200 710" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-gudang)" />
+
+                <!-- 9. Selesai -->
+                <g class="node-group" onclick="showDetails('selesai', 'Selesai', 'Sesi operasional admin gudang selesai.')">
+                    <rect x="100" y="710" width="200" height="45" rx="22.5" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="200" y="737" class="text-main" text-anchor="middle">Selesai</text>
+                </g>
+            </svg>
+
+            <!-- 3. FLOWCHART OWNER (LINIER) -->
+            <svg id="svg-owner" width="420" height="1040" viewBox="0 0 420 1040" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                <defs>
+                    <marker id="arrow-owner" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#000000" class="marker-path" />
+                    </marker>
+                </defs>
+
+                <!-- Title -->
+                <text x="210" y="30" class="text-title" text-anchor="middle">FLOWCHART OPERASIONAL - OWNER (BUDI)</text>
+
+                <!-- 1. Mulai -->
+                <g class="node-group" onclick="showDetails('mulai-o', 'Mulai', 'Titik awal operasional sistem untuk Owner.')">
+                    <rect x="110" y="50" width="200" height="45" rx="22.5" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="77" class="text-main" text-anchor="middle">Mulai</text>
+                </g>
+                <path d="M 210 95 L 210 130" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 2. Login Owner -->
+                <g class="node-group" onclick="showDetails('login-o', 'Input Email &amp; Password', 'Owner menginput kredensial login (Email dan Password) pada halaman autentikasi.')">
+                    <rect x="100" y="130" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="157" class="text-main" text-anchor="middle">Input Email &amp; Password</text>
+                </g>
+                <path d="M 210 175 L 210 210" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 3. Validasi Login -->
+                <g class="node-group" onclick="showDetails('validasi-o', 'Validasi Login?', 'Sistem memverifikasi email & password owner ke database.')">
+                    <polygon points="210,210 300,240 210,270 120,240" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="244" class="text-main" text-anchor="middle">Validasi Login?</text>
+                </g>
+                <!-- Tidak Valid Loopback -->
+                <path d="M 120 240 L 60 240 L 60 152 L 100 152" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+                <text x="85" y="230" class="text-label-tidak" text-anchor="middle">Tidak</text>
+                
+                <!-- Valid / Ya -->
+                <path d="M 210 270 L 210 310" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+                <text x="225" y="290" class="text-label-ya" text-anchor="middle">Ya</text>
+
+                <!-- 4. Dashboard -->
+                <g class="node-group" onclick="showDetails('dashboard-o', 'Dashboard', 'Owner diarahkan masuk ke Dashboard utama.')">
+                    <rect x="100" y="310" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="337" class="text-main" text-anchor="middle">Dashboard</text>
+                </g>
+                <path d="M 210 355 L 210 390" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 5. Input Parameter Prediksi -->
+                <g class="node-group" onclick="showDetails('setup-o', 'Input Parameter Prediksi', 'Owner menginput setelan Safety Stock dan Lead Time supplier.')">
+                    <rect x="100" y="390" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="417" class="text-main" text-anchor="middle">Input Parameter Prediksi</text>
+                </g>
+                <path d="M 210 435 L 210 470" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 6. Tarik Data Penjualan -->
+                <g class="node-group" onclick="showDetails('tarik-o', 'Tarik Data Penjualan', 'Sistem memuat data historis volume penjualan barang bulanan dari database.')">
+                    <rect x="100" y="470" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="497" class="text-main" text-anchor="middle">Tarik Data Penjualan</text>
+                </g>
+                <path d="M 210 515 L 210 550" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 7. Proses Perhitungan Regresi -->
+                <g class="node-group" onclick="showDetails('regresi-o', 'Proses Perhitungan Regresi', 'Sistem menghitung konstanta regresi linear least squares untuk meramalkan jumlah permintaan.')">
+                    <rect x="100" y="550" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="577" class="text-main" text-anchor="middle">Proses Perhitungan Regresi</text>
+                </g>
+                <path d="M 210 595 L 210 630" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 8. Perhitungan Reorder Point (ROP) -->
+                <g class="node-group" onclick="showDetails('rop-o', 'Perhitungan Reorder Point (ROP)', 'Sistem menghitung batas reorder point (ROP) berdasarkan parameter terpilih.')">
+                    <rect x="100" y="630" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="657" class="text-main" text-anchor="middle">Perhitungan Reorder Point (ROP)</text>
+                </g>
+                <path d="M 210 675 L 210 710" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 9. Evaluasi ROP -->
+                <g class="node-group" onclick="showDetails('evaluasi-o', 'Stok Fisik <= ROP?', 'Sistem mengevaluasi apakah stok fisik saat ini kurang dari atau sama dengan batas ROP.')">
+                    <polygon points="210,710 300,740 210,770 120,740" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="744" class="text-main" text-anchor="middle">Stok Fisik &lt;= ROP?</text>
+                </g>
+                <!-- Tidak (Aman) Loopback to Dashboard -->
+                <path d="M 120 740 L 50 740 L 50 332 L 100 332" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+                <text x="85" y="730" class="text-label-tidak" text-anchor="middle">Tidak</text>
+                
+                <!-- Ya (Kritis) -->
+                <path d="M 210 770 L 210 810" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+                <text x="225" y="790" class="text-label-ya" text-anchor="middle">Ya</text>
+
+                <!-- 10. Kirim Notifikasi Telegram -->
+                <g class="node-group" onclick="showDetails('telegram-o', 'Kirim Notifikasi Telegram', 'Bot Telegram mengirim push alert pemberitahuan stok kritis ke HP owner.')">
+                    <rect x="100" y="810" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="837" class="text-main" text-anchor="middle">Kirim Notifikasi Telegram</text>
+                </g>
+                <path d="M 210 855 L 210 890" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 11. Tampilkan & Ekspor PDF PO -->
+                <g class="node-group" onclick="showDetails('po-o', 'Tampilkan &amp; Ekspor PDF PO', 'Sistem memformat PO pengadaan barang otomatis dalam dokumen PDF.')">
+                    <rect x="100" y="890" width="220" height="45" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="917" class="text-main" text-anchor="middle">Tampilkan &amp; Ekspor PDF PO</text>
+                </g>
+                <path d="M 210 935 L 210 970" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow-owner)" />
+
+                <!-- 12. Selesai -->
+                <g class="node-group" onclick="showDetails('selesai-o', 'Selesai', 'Sesi operasional owner selesai.')">
+                    <rect x="110" y="970" width="200" height="45" rx="22.5" ry="22.5" fill="#ffffff" stroke="#000000" stroke-width="1.5" />
+                    <text x="210" y="997" class="text-main" text-anchor="middle">Selesai</text>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="detail-panel" id="detailPanel">
+            <h3>📌 <span id="detailTitle">Pilih Simbol Bagan Alir</span></h3>
+            <p id="detailDesc">Klik pada salah satu simbol bagan alir di atas untuk melihat rincian penjelasan akademik mengenai proses, masukan, keputusan, atau luaran.</p>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching
+        function switchTab(tabId) {
+            const combinedSvg = document.getElementById('svg-combined');
+            const gudangSvg = document.getElementById('svg-gudang');
+            const ownerSvg = document.getElementById('svg-owner');
+            
+            const btnCombined = document.querySelectorAll('.tab-btn')[0];
+            const btnGudang = document.querySelectorAll('.tab-btn')[1];
+            const btnOwner = document.querySelectorAll('.tab-btn')[2];
+            
+            const cardTitle = document.getElementById('cardTitleText');
+            const cardDesc = document.getElementById('cardDescText');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            // Reset active nodes
+            document.querySelectorAll('.node-group').forEach(n => n.classList.remove('active'));
+            document.getElementById('detailPanel').style.display = 'none';
+
+            if (tabId === 'combined') {
+                combinedSvg.style.display = 'block';
+                gudangSvg.style.display = 'none';
+                ownerSvg.style.display = 'none';
+                
+                btnCombined.classList.add('active');
+                btnGudang.classList.remove('active');
+                btnOwner.classList.remove('active');
+                
+                cardTitle.textContent = "Flowchart Sistem Inventory Control";
+                cardDesc.textContent = "Bagan alir terintegrasi untuk Admin Gudang dan Owner Budi Variasi";
+                downloadBtn.setAttribute("onclick", "downloadAsJpg('svg-combined', 'flowchart_gabungan_budi_variasi.jpg')");
+            } else if (tabId === 'gudang') {
+                combinedSvg.style.display = 'none';
+                gudangSvg.style.display = 'block';
+                ownerSvg.style.display = 'none';
+                
+                btnCombined.classList.remove('active');
+                btnGudang.classList.add('active');
+                btnOwner.classList.remove('active');
+                
+                cardTitle.textContent = "Flowchart Operasional Admin Gudang";
+                cardDesc.textContent = "Bagan alir linier lurus vertikal untuk aktivitas operasional gudang dan transaksi kasir";
+                downloadBtn.setAttribute("onclick", "downloadAsJpg('svg-gudang', 'flowchart_admin_gudang.jpg')");
+            } else {
+                combinedSvg.style.display = 'none';
+                gudangSvg.style.display = 'none';
+                ownerSvg.style.display = 'block';
+                
+                btnCombined.classList.remove('active');
+                btnGudang.classList.remove('active');
+                btnOwner.classList.add('active');
+                
+                cardTitle.textContent = "Flowchart Operasional Owner";
+                cardDesc.textContent = "Bagan alir linier lurus vertikal untuk peramalan Regresi Linear dan kalkulasi ROP";
+                downloadBtn.setAttribute("onclick", "downloadAsJpg('svg-owner', 'flowchart_owner.jpg')");
+            }
+        }
+
+        // Theme toggler
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            
+            body.classList.toggle('theme-light');
+            
+            if (body.classList.contains('theme-light')) {
+                btn.textContent = "🌓 Mode Gelap";
+            } else {
+                btn.textContent = "🌓 Mode Terang (Cetak)";
+            }
+        }
+
+        // Details Panel trigger
+        function showDetails(nodeId, title, desc) {
+            // Remove active highlight from all nodes
+            document.querySelectorAll('.node-group').forEach(n => n.classList.remove('active'));
+            
+            // Highlight current target safely
+            const activeEvent = window.event;
+            if (activeEvent && activeEvent.target) {
+                const groupNode = activeEvent.target.closest('.node-group');
+                if (groupNode) {
+                    groupNode.classList.add('active');
+                }
+            }
+
+            document.getElementById('detailPanel').style.display = 'block';
+            document.getElementById('detailTitle').textContent = title;
+            document.getElementById('detailDesc').textContent = desc;
+        }
+
+        // High-resolution SVG to JPEG download
+        function downloadAsJpg(svgId, filename) {
+            const svgElement = document.getElementById(svgId);
+            if (!svgElement) return;
+
+            const width = parseInt(svgElement.getAttribute('width'), 10);
+            const height = parseInt(svgElement.getAttribute('height'), 10);
+            const scale = 2; // 2x for HD
+
+            const svgClone = svgElement.cloneNode(true);
+            svgClone.style.backgroundColor = '#ffffff';
+
+            // Inject inline styles directly into the cloned SVG
+            const styleElement = document.createElementNS("http://www.w3.org/2000/svg", "style");
+            styleElement.textContent = `
+                rect, polygon, ellipse { fill: #ffffff !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                path { fill: none !important; stroke: #000000 !important; stroke-width: 1.5px !important; }
+                text { font-family: Arial, sans-serif !important; fill: #000000 !important; text-anchor: middle !important; }
+                .text-main { font-size: 11px !important; font-weight: 700 !important; text-anchor: middle !important; }
+                .text-sub { font-size: 8.5px !important; fill: #475569 !important; text-anchor: middle !important; }
+                .text-title { font-size: 12px !important; font-weight: 800 !important; fill: #0f172a !important; text-anchor: middle !important; }
+                .text-label-ya, .text-label-tidak { font-size: 9.5px !important; font-weight: 800 !important; text-anchor: middle !important; }
+                .marker-path { fill: #000000 !important; }
+            `;
+            svgClone.insertBefore(styleElement, svgClone.firstChild);
+
+            const svgString = new XMLSerializer().serializeToString(svgClone);
+            const svgBase64 = btoa(unescape(encodeURIComponent(svgString)));
+            const imgSrc = 'data:image/svg+xml;base64,' + svgBase64;
+
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                const ctx = canvas.getContext('2d');
+
+                // Fill background with solid white
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                const dataUrl = canvas.toDataURL('image/jpeg', 1.0);
+
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                link.click();
+            };
+            img.src = imgSrc;
+        }
+    </script>
+</body>
+</html>

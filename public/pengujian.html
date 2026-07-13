@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengujian Sistem & Analisis Akurasi MAPE - Budi Variasi</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for beautiful math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --success-color: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.15);
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        body.light-mode {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --success-color: #15803d;
+            --success-bg: #dcfce7;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -2px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow);
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            border-color: var(--accent-color);
+            background-color: var(--bg-main);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* Tabs styling */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 2px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--accent-color);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 10px;
+        }
+
+        /* Table styling */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        body.light-mode tbody tr:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+        }
+
+        /* Math styling */
+        .math-block {
+            margin: 20px 0;
+            padding: 16px;
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            overflow-x: auto;
+            text-align: center;
+            border: 1px dashed var(--border-color);
+        }
+
+        body.light-mode .math-block {
+            background-color: #f1f5f9;
+        }
+
+        .formula-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .step-list {
+            margin-left: 20px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        .step-list li {
+            margin-bottom: 8px;
+        }
+
+        /* Print Media Style */
+        @media print {
+            body {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+                padding: 0 !important;
+            }
+
+            .container {
+                max-width: 100% !important;
+            }
+
+            header, .tabs, .btn-group, #themeBtn {
+                display: none !important;
+            }
+
+            .tab-content {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            .card {
+                background-color: #ffffff !important;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+                margin-bottom: 40px !important;
+            }
+
+            table {
+                border: 1px solid #000000 !important;
+            }
+
+            th, td {
+                border-bottom: 1px solid #000000 !important;
+                color: #000000 !important;
+                padding: 8px !important;
+            }
+
+            th {
+                background-color: #f1f5f9 !important;
+            }
+
+            .badge {
+                border: 1px solid #000000 !important;
+                background: none !important;
+                color: #000000 !important;
+            }
+
+            .math-block {
+                background-color: #ffffff !important;
+                border: 1px solid #000000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="header-title">
+                <h1>Dokumen Pengujian & Akurasi Prediksi</h1>
+                <p>Bahan Laporan Bab IV Skripsi — Sistem Informasi Budi Variasi Mobil</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn" id="themeBtn" onclick="toggleTheme()">🌓 Mode Terang</button>
+                <button class="btn btn-primary" onclick="window.print()">📥 Cetak PDF / Laporan</button>
+                <button class="btn btn-primary" style="background-color: #2b579a; border-color: #2b579a;" onclick="exportToWord()">📝 Unduh Word (.doc)</button>
+                <a href="/admin/dashboard" class="btn">Kembali ke Admin</a>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'blackbox')">1. Black Box Testing</button>
+            <button class="tab-btn" onclick="switchTab(event, 'mape')">2. Akurasi MAPE</button>
+        </div>
+
+        <!-- TAB 1: BLACKBOX TESTING -->
+        <div id="blackbox" class="tab-content active">
+            <div class="card">
+                <h2>Deskripsi Pengujian Black Box</h2>
+                <p class="formula-info">
+                    Pengujian Black Box (*Black Box Testing*) memfokuskan pada fungsionalitas sistem berdasarkan input dan output. 
+                    Tujuannya adalah untuk memastikan bahwa semua tombol, form, komputasi di latar belakang, dan notifikasi 
+                    berjalan sesuai dengan rancangan sistem tanpa adanya error logika pada antarmuka.
+                </p>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 5%">No</th>
+                                <th style="width: 20%">Fitur yang Diuji</th>
+                                <th style="width: 25%">Skenario Pengujian</th>
+                                <th style="width: 20%">Harapan</th>
+                                <th style="width: 20%">Hasil Pengujian</th>
+                                <th style="width: 10%">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- MODUL 1: AUTENTIKASI DAN HAK AKSES -->
+                            <tr>
+                                <td>1</td>
+                                <td>Login Admin Gudang</td>
+                                <td>Memasukkan username & password Admin Gudang yang benar, lalu mengeklik tombol "Login".</td>
+                                <td>Sistem masuk ke Dashboard Admin Gudang dan membuka menu edit stok, transaksi, dan data master.</td>
+                                <td>Sistem berhasil mengautentikasi pengguna, mengalihkan ke dashboard admin, serta menampilkan menu akses sesuai hak akses.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Login Owner</td>
+                                <td>Memasukkan username & password Owner yang benar, lalu mengeklik tombol "Login".</td>
+                                <td>Sistem masuk ke Dashboard Owner dengan akses terbatas (hanya melihat laporan dan menyetujui ROP).</td>
+                                <td>Sistem berhasil mengautentikasi pengguna, mengalihkan ke dashboard owner, dan membatasi akses menu lainnya.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Login Gagal</td>
+                                <td>Memasukkan password salah pada username yang terdaftar, lalu mengeklik tombol "Login".</td>
+                                <td>Akses ditolak, dan muncul pesan error "Kredensial tidak cocok".</td>
+                                <td>Sistem menolak login, tetap berada di halaman login, dan menampilkan pesan kesalahan.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Hak Akses Middleware</td>
+                                <td>Mencoba mengakses langsung URL `/admin/dashboard` tanpa login terlebih dahulu.</td>
+                                <td>Sistem otomatis melakukan redirect ke halaman `/login` (Middleware Auth bekerja).</td>
+                                <td>Halaman terblokir dari akses tamu dan langsung diarahkan kembali ke halaman login.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Logout Pengguna</td>
+                                <td>Mengeklik tombol "Logout" pada panel navigasi akun.</td>
+                                <td>Sesi pengguna dihancurkan (*destroy session*) dan dialihkan kembali ke halaman `/login`.</td>
+                                <td>Session dihapus dan pengguna diarahkan ke halaman login dengan aman.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 2: DASHBOARD & SUMMARY -->
+                            <tr>
+                                <td>6</td>
+                                <td>Ringkasan Statistik Dashboard</td>
+                                <td>Membuka halaman utama dashboard admin/owner.</td>
+                                <td>Menampilkan jumlah total produk, status "Segera Pesan", "Waspada", dan total penjualan bulan berjalan.</td>
+                                <td>Informasi ringkasan statistik tampil dengan lengkap dan data terbarui secara akurat.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Grafik Tren Penjualan</td>
+                                <td>Melihat area bagan grafik pada dashboard utama.</td>
+                                <td>Menampilkan grafik garis/batang yang menggambarkan tren kuantitas penjualan bulanan secara real-time.</td>
+                                <td>Grafik garis/batang ter-render dengan benar sesuai data penjualan bulanan.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 3: MANAJEMEN PENGGUNA -->
+                            <tr>
+                                <td>8</td>
+                                <td>Tambah Pengguna</td>
+                                <td>Menginput name, email, password, dan memilih role ("admin" / "owner") lalu klik Simpan.</td>
+                                <td>Pengguna baru berhasil dibuat, terenkripsi password-nya, dan dapat digunakan untuk login.</td>
+                                <td>Data pengguna baru berhasil masuk ke database dan dapat digunakan untuk login.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Ubah Role Pengguna</td>
+                                <td>Mengubah peran pengguna dari Admin menjadi Owner pada daftar manajemen pengguna.</td>
+                                <td>Perubahan peran tersimpan di database dan hak akses pengguna langsung terupdate pada login berikutnya.</td>
+                                <td>Perubahan peran berhasil disimpan dan akses pengguna berubah sesuai dengan peran barunya.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Hapus Pengguna</td>
+                                <td>Mengeklik tombol "Hapus" pada salah satu akun karyawan yang tidak aktif.</td>
+                                <td>Akun terhapus permanen dari database, dan daftar akun langsung diperbarui.</td>
+                                <td>Akun berhasil dihapus dan hilang dari daftar pengguna secara real-time.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 4: MANAJEMEN SUPPLIER -->
+                            <tr>
+                                <td>11</td>
+                                <td>Tambah Supplier</td>
+                                <td>Menginput nama supplier, alamat, dan estimasi waktu pengiriman (*Lead Time* rata-rata).</td>
+                                <td>Data supplier tersimpan di tabel `suppliers` dengan nilai lead time yang valid.</td>
+                                <td>Supplier baru berhasil tersimpan dan tampil dalam daftar pilihan supplier barang.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td>Ubah Lead Time Supplier</td>
+                                <td>Mengubah estimasi lead time supplier dari 7 hari menjadi 5 hari pada form edit.</td>
+                                <td>Data terupdate, dan perubahan lead time langsung memengaruhi perhitungan ROP untuk barang miliknya.</td>
+                                <td>Lead time berhasil diperbarui dan sistem memperbarui nilai ROP barang milik supplier tersebut.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td>Hapus Supplier</td>
+                                <td>Menghapus supplier yang tidak lagi bekerja sama dengan toko.</td>
+                                <td>Supplier terhapus jika tidak ada relasi aktif, menjaga integritas referensial database.</td>
+                                <td>Data supplier berhasil dihapus tanpa merusak integritas data barang terkait.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 5: MANAJEMEN PRODUK -->
+                            <tr>
+                                <td>14</td>
+                                <td>Tambah Produk</td>
+                                <td>Mengisi detail produk baru beserta stok awal, harga beli, harga jual, dan memilih supplier.</td>
+                                <td>Produk terdaftar di tabel `products` dan relasi 1-to-1 di `inventory_controls` dibuat otomatis.</td>
+                                <td>Produk baru berhasil ditambahkan beserta inisialisasi status kontrol stoknya di database.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td>Ubah Detail & Harga Produk</td>
+                                <td>Mengubah harga jual dan kategori produk pada form edit produk.</td>
+                                <td>Perubahan disimpan, dan harga baru langsung diterapkan pada form transaksi penjualan.</td>
+                                <td>Detail produk berhasil diubah dan harga baru langsung muncul di modul transaksi.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td>Hapus Produk</td>
+                                <td>Menekan tombol hapus pada salah satu produk yang sudah tidak dijual lagi.</td>
+                                <td>Produk terhapus dari katalog, dan data kontrol inventori terkait ikut terhapus secara *cascade*.</td>
+                                <td>Data produk beserta kontrol stoknya berhasil terhapus dari sistem tanpa error.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 6: TRANSAKSI PENJUALAN -->
+                            <tr>
+                                <td>17</td>
+                                <td>Catat Transaksi Penjualan</td>
+                                <td>Membuat data transaksi penjualan baru (memilih produk dan memasukkan jumlah barang keluar).</td>
+                                <td>Sistem memotong stok fisik dan menyimpan catatan transaksi ke dalam tabel `sales`.</td>
+                                <td>Transaksi penjualan tersimpan, stok barang otomatis berkurang sesuai kuantitas terjual.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>18</td>
+                                <td>Validasi Batas Stok</td>
+                                <td>Menginput penjualan dengan kuantitas melebihi stok yang tersedia (kecuali Kaca Film 3M Black Beauty).</td>
+                                <td>Sistem memblokir input transaksi dan menampilkan error "Stok barang tidak cukup".</td>
+                                <td>Input ditolak oleh sistem dan muncul peringatan bahwa stok tidak mencukupi untuk transaksi tersebut.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td>Toleransi Stok Khusus</td>
+                                <td>Menginput transaksi penjualan "Kaca Film 3M Black Beauty" melebihi stok fisik.</td>
+                                <td>Transaksi diizinkan tersimpan (sesuai aturan bisnis Budi Variasi karena prapemesanan diizinkan).</td>
+                                <td>Transaksi berhasil disimpan meskipun stok negatif, memfasilitasi kebutuhan prapemesanan.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>Pemicu Hitung Ulang Otomatis</td>
+                                <td>Menyelesaikan input transaksi penjualan barang.</td>
+                                <td>Algoritma di latar belakang otomatis memicu pengerjaan ulang model regresi linear dan ROP.</td>
+                                <td>Sistem melakukan komputasi regresi linear dan memperbarui status ROP barang segera setelah transaksi selesai.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 7: TRANSAKSI PEMBELIAN -->
+                            <tr>
+                                <td>21</td>
+                                <td>Catat Transaksi Pembelian</td>
+                                <td>Mencatat nota pembelian barang masuk dari supplier pada menu transaksi pembelian.</td>
+                                <td>Stok produk otomatis bertambah senilai jumlah yang dibeli, dan data tercatat di riwayat pembelian.</td>
+                                <td>Transaksi pembelian berhasil direkam dan stok fisik barang bertambah sesuai jumlah input.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>22</td>
+                                <td>Daftar Riwayat Pembelian</td>
+                                <td>Melihat daftar transaksi pembelian barang masuk.</td>
+                                <td>Menampilkan daftar faktur pembelian secara terperinci (tanggal masuk, kuantitas, harga kulakan).</td>
+                                <td>Riwayat pembelian tampil dengan urutan kronologis dan detail yang lengkap.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 8: ALGORITMA ROP & STATUS STOK -->
+                            <tr>
+                                <td>23</td>
+                                <td>Pengaturan Safety Stock</td>
+                                <td>Admin menginput Safety Stock manual pada halaman pengaturan ROP per barang.</td>
+                                <td>Nilai Safety Stock disimpan dan digunakan sebagai konstanta penjumlahan pada rumus ROP.</td>
+                                <td>Input Safety Stock berhasil disimpan dan langsung memengaruhi hasil kalkulasi ROP terbaru.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td>Deteksi Stok Waspada</td>
+                                <td>Stok saat ini berkurang hingga kurang dari atau sama dengan 1.5 kali nilai ROP.</td>
+                                <td>Status stok produk otomatis berganti menjadi "Waspada" pada tabel dashboard.</td>
+                                <td>Sistem mendeteksi penurunan stok di bawah batas waspada dan memperbarui status visualnya.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>25</td>
+                                <td>Deteksi Stok Segera Pesan</td>
+                                <td>Stok saat ini berkurang hingga kurang dari atau sama dengan nilai ROP.</td>
+                                <td>Status stok produk otomatis berganti menjadi "Segera Pesan" pada tabel dashboard.</td>
+                                <td>Status barang otomatis berubah menjadi "Segera Pesan" dan memicu peringatan restock.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 9: BOT TELEGRAM EWS -->
+                            <tr>
+                                <td>26</td>
+                                <td>Kirim Notifikasi EWS Telegram</td>
+                                <td>Kondisi stok produk menyentuh batas ROP (status menjadi "Segera Pesan").</td>
+                                <td>Sistem memicu HTTP Request ke API Telegram dan bot mengirim pesan peringatan dini ke grup/channel Owner.</td>
+                                <td>Notifikasi peringatan dini terkirim ke chat grup Telegram Owner secara instan.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>27</td>
+                                <td>Penanganan Error API Telegram</td>
+                                <td>Mengonfigurasi Chat ID Telegram palsu atau salah di file `.env`.</td>
+                                <td>Sistem mencatat error log pengiriman tapi tidak menyebabkan aplikasi web crash/berhenti bekerja.</td>
+                                <td>Kesalahan pengiriman tercatat di log laravel, dan aplikasi web tetap berjalan normal tanpa gangguan.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 10: PELAPORAN -->
+                            <tr>
+                                <td>28</td>
+                                <td>Filter Laporan Bulanan</td>
+                                <td>Memilih bulan tertentu (misal: "April 2026") pada form filter cetak laporan.</td>
+                                <td>Halaman memuat data transaksi khusus bulan April 2026 dan menyiapkannya untuk dicetak.</td>
+                                <td>Data ter-filter dengan benar sesuai bulan yang dipilih untuk siap dicetak.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>29</td>
+                                <td>Ekspor/Cetak Laporan</td>
+                                <td>Mengeklik tombol "Cetak Laporan" setelah memilih filter bulan.</td>
+                                <td>Membuka dialog pencetakan browser dengan layout bersih, tanpa header navigasi web.</td>
+                                <td>Dialog print browser terbuka dengan pratinjau halaman cetak yang bersih dan terformat rapi.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+
+                            <!-- MODUL 11: LANDING PAGE -->
+                            <tr>
+                                <td>30</td>
+                                <td>Kelola Testimonial Landing Page</td>
+                                <td>Memilih ulasan pelanggan dan menyalakan opsi "Tampilkan di Depan" (*is_displayed = true*).</td>
+                                <td>Ulasan tersebut otomatis muncul pada bagian Testimonial di Landing Page depan Budi Variasi.</td>
+                                <td>Testimonial terpilih terbit di landing page secara dinamis.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                            <tr>
+                                <td>31</td>
+                                <td>Kelola Layanan Landing Page</td>
+                                <td>Menambah gambar baru dan keterangan layanan jasa pasang aksesoris (Services).</td>
+                                <td>Katalog terupdate, dan gambar jasa pasang baru muncul di Landing Page depan.</td>
+                                <td>Jasa pasang aksesoris baru berhasil dipublikasikan ke halaman utama pengunjung.</td>
+                                <td><span class="badge badge-success">Sesuai</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: MAPE ACCURACY -->
+        <div id="mape" class="tab-content">
+            <div class="card">
+                <h2>Analisis Akurasi Prediksi MAPE</h2>
+                <div class="formula-info">
+                    <strong>Mean Absolute Percentage Error (MAPE)</strong> mengukur ketepatan peramalan dengan menghitung persentase rata-rata penyimpangan absolut antara data penjualan riil dengan hasil proyeksi persamaan regresi linear.
+                </div>
+
+                <h3>1. Formula Matematika MAPE</h3>
+                <div class="math-block">
+                    $$\text{MAPE} = \frac{1}{n} \sum_{t=1}^{n} \left| \frac{Y_t - \hat{Y}_t}{Y_t} \right| \times 100\%$$
+                </div>
+                <p class="formula-info" style="margin-left: 10px;">
+                    Keterangan:<br>
+                    - \(Y_t\) : Data aktual penjualan riil pada periode ke-\(t\)<br>
+                    - \(\hat{Y}_t\) : Nilai prediksi/peramalan regresi pada periode ke-\(t\)<br>
+                    - \(n\) : Jumlah total periode deret waktu pengujian
+                </p>
+            </div>
+
+            <div class="card">
+                <h2>Simulasi Perhitungan Riil (Lampu Sein LED - Produk Paling Laris)</h2>
+                <p class="formula-info">
+                    Berikut adalah data transaksi aktual bulanan selama 5 bulan (Januari - Mei 2026) dan perhitungan nilai prediksi menggunakan persamaan Regresi Linear \(Y = a + bX\) untuk produk paling laris di Budi Variasi, yaitu <strong>Lampu Sein LED (ID 15)</strong> dengan total penjualan sebanyak 16 unit.
+                </p>
+
+                <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem;">Langkah 1: Menghitung Koefisien Regresi</h3>
+                <ul class="step-list" style="margin-bottom: 20px;">
+                    <li>Periode pengujian (\(n\)) = 5</li>
+                    <li>\(\sum X = 1 + 2 + 3 + 4 + 5 = 15\)</li>
+                    <li>\(\sum Y = 3 + 1 + 6 + 3 + 3 = 16\)</li>
+                    <li>\(\sum X^2 = 1^2 + 2^2 + 3^2 + 4^2 + 5^2 = 55\)</li>
+                    <li>\(\sum XY = (1\times 3) + (2\times 1) + (3\times 6) + (4\times 3) + (5\times 3) = 3 + 2 + 18 + 12 + 15 = 50\)</li>
+                </ul>
+
+                <div class="math-block">
+                    $$b = \frac{n\sum XY - \sum X\sum Y}{n\sum X^2 - (\sum X)^2} = \frac{5(50) - (15)(16)}{5(55) - (15)^2} = \frac{250 - 240}{275 - 225} = 0.2$$
+                </div>
+                <div class="math-block">
+                    $$a = \frac{\sum Y - b\sum X}{n} = \frac{16 - (0.2\times 15)}{5} = \frac{13}{5} = 2.6$$
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem;">Sehingga, persamaan Regresi Linear yang digunakan adalah: <strong>\(Y = 2.6 + 0.2X\)</strong></p>
+
+                <h3 style="margin-top: 30px; margin-bottom: 10px; font-size: 1.1rem;">Langkah 2: Menghitung Persentase Error Tiap Bulan</h3>
+                
+                <div class="table-responsive" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Periode (X)</th>
+                                <th>Bulan</th>
+                                <th>Aktual (\(Y_t\))</th>
+                                <th>Prediksi (\(\hat{Y}_t\))</th>
+                                <th>Selisih Absolut \(\lvert Y_t - \hat{Y}_t \rvert\)</th>
+                                <th>Persentase Error (APE)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Januari</td>
+                                <td>3</td>
+                                <td>2.8</td>
+                                <td>0.2</td>
+                                <td>6.67%</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Februari</td>
+                                <td>1</td>
+                                <td>3.0</td>
+                                <td>2.0</td>
+                                <td>200.00%</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Maret</td>
+                                <td>6</td>
+                                <td>3.2</td>
+                                <td>2.8</td>
+                                <td>46.67%</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>April</td>
+                                <td>3</td>
+                                <td>3.4</td>
+                                <td>0.4</td>
+                                <td>13.33%</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Mei</td>
+                                <td>3</td>
+                                <td>3.6</td>
+                                <td>0.6</td>
+                                <td>20.00%</td>
+                            </tr>
+                            <tr style="font-weight: 700;">
+                                <td colspan="2">Jumlah</td>
+                                <td>16</td>
+                                <td>-</td>
+                                <td>6.0</td>
+                                <td>286.67%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 10px; font-size: 1.1rem;">Langkah 3: Rata-Rata Nilai MAPE</h3>
+                <div class="math-block">
+                    $$\text{MAPE} = \frac{286.67\%}{5} = 57.33\%$$
+                </div>
+
+                <div style="background-color: var(--success-bg); border-left: 4px solid var(--success-color); padding: 16px; border-radius: 8px; margin-top: 20px; font-size: 0.95rem;">
+                    <strong>Kesimpulan Akurasi:</strong> Hasil kalkulasi rata-rata nilai error peramalan (MAPE) untuk produk paling laris (Lampu Sein LED) adalah <strong>57.33%</strong>. Karena nilai MAPE berada di atas 50%, tingkat keakurasian prediksi pada produk ini dikategorikan kurang akurat secara statistik standar, hal ini sangat wajar terjadi pada item dengan volume penjualan eceran bulanan yang bernilai kecil (di bawah 10 unit per bulan) karena pergeseran 1-2 unit aktual saja dapat meningkatkan nilai persentase error secara drastis. Namun demikian, model regresi linear ini tetap bernilai guna tinggi karena berhasil menggambarkan arah tren penjualan yang positif secara logis untuk inisialisasi persediaan minimum.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById("themeBtn");
+            body.classList.toggle("light-mode");
+            if (body.classList.contains("light-mode")) {
+                btn.textContent = "🌓 Mode Gelap";
+            } else {
+                btn.textContent = "🌓 Mode Terang";
+            }
+        }
+
+        function switchTab(evt, tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            // Remove active class from all tab buttons
+            const tabBtns = document.getElementsByClassName("tab-btn");
+            for (let i = 0; i < tabBtns.length; i++) {
+                tabBtns[i].classList.remove("active");
+            }
+
+            // Show current tab content and make button active
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        function exportToWord() {
+            // Get content from both tabs
+            const blackboxContent = document.getElementById("blackbox").innerHTML;
+            const mapeContent = document.getElementById("mape").innerHTML;
+
+            // Combine contents with page break
+            let combinedContent = `
+                <div style="margin-bottom: 40px; text-align: center;">
+                    <h1 style="font-size: 20pt; font-weight: bold; margin-bottom: 5px; font-family: 'Segoe UI', Arial, sans-serif;">Dokumen Pengujian & Akurasi Prediksi</h1>
+                    <p style="font-size: 11pt; color: #555555; margin-top: 0; font-family: 'Segoe UI', Arial, sans-serif;">Bahan Laporan Bab IV Skripsi — Sistem Informasi Budi Variasi Mobil</p>
+                </div>
+                <hr style="border: 1px solid #000000; margin-bottom: 40px;">
+                
+                <h2 style="font-size: 16pt; font-weight: bold; margin-top: 20px; margin-bottom: 15px; border-bottom: 2px solid #0f172a; padding-bottom: 5px; font-family: 'Segoe UI', Arial, sans-serif;">1. Pengujian Black Box</h2>
+                ${blackboxContent}
+                
+                <br style="page-break-before: always; clear: both;">
+                
+                <h2 style="font-size: 16pt; font-weight: bold; margin-top: 40px; margin-bottom: 15px; border-bottom: 2px solid #0f172a; padding-bottom: 5px; font-family: 'Segoe UI', Arial, sans-serif;">2. Analisis Akurasi MAPE</h2>
+                ${mapeContent}
+            `;
+
+            // Style definitions optimized for Microsoft Word layout
+            const styles = `
+                body { font-family: 'Segoe UI', Arial, sans-serif; color: #0f172a; line-height: 1.5; padding: 20px; }
+                h2 { font-size: 16pt; font-weight: bold; color: #0f172a; margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #0f172a; padding-bottom: 5px; }
+                h3 { font-size: 12pt; font-weight: bold; color: #1e293b; margin-top: 20px; margin-bottom: 10px; }
+                p, li { font-size: 11pt; color: #334155; }
+                table { border-collapse: collapse; width: 100%; margin: 15px 0; border: 1px solid #cbd5e1; }
+                th, td { border: 1px solid #cbd5e1; padding: 10px 12px; font-size: 10pt; text-align: left; vertical-align: top; }
+                th { background-color: #f8fafc; font-weight: bold; color: #0f172a; }
+                .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 9pt; font-weight: bold; border: 1px solid #000000; text-transform: uppercase; }
+                .badge-success { color: #15803d; background-color: #dcfce7; border-color: #bbf7d0; }
+                .math-block { margin: 15px 0; padding: 12px; background-color: #f1f5f9; border: 1px dashed #cbd5e1; text-align: center; font-style: italic; }
+                .formula-info { font-size: 9.5pt; color: #64748b; line-height: 1.6; }
+                .step-list { margin-left: 20px; }
+                .step-list li { margin-bottom: 6px; }
+            `;
+
+            const preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Dokumen Pengujian & Akurasi Prediksi</title><style>" + styles + "</style></head><body>";
+            const postHtml = "</body></html>";
+            const html = preHtml + combinedContent + postHtml;
+
+            const blob = new Blob(['\\ufeff' + html], {
+                type: 'application/msword'
+            });
+            
+            // Create a temporary link to download the doc file
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Dokumen_Pengujian_Budi_Variasi.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
